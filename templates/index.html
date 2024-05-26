@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chart.js Example</title>
+</head>
+<body>
+<div>
+    <canvas id="myChart" width="500" height="200"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+
+<script>
+    async function fetchData() {
+        const response = await fetch('/data');
+        const json = await response.json();
+        return json;
+    }
+
+    async function createChart() {
+        const data = await fetchData();
+
+        const labels = data.data.map(row => new Date(row[0])); // Convert dates to JavaScript Date objects
+        const dataset1 = data.data.map(row => row[1]);
+        const dataset2 = data.data.map(row => row[2]);
+
+        const allData = dataset1.concat(dataset2);
+        const minY = Math.min(...allData);
+
+        const ctx = document.getElementById('myChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: '수축기혈압',
+                    data: dataset1,
+                    //borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1,
+                    fill: false
+                }, {
+                    label: '이완기혈압',
+                    data: dataset2,
+                    //borderColor: 'rgba(153, 102, 255, 1)',
+                    borderWidth: 1,
+                    fill: false
+                }]
+
+            },
+            options: {
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: {
+                            unit: 'week',
+                            tooltipFormat: 'yyyy-MM-dd',
+                            displayFormats: {
+                                week: 'yyyy-MM-dd'
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: '날짜'
+                        }
+                    },
+                    y: {
+
+                        //beginAtZero: true,
+                        suggestedMin: minY,
+                        title: {
+                            display: true,
+                            text: '혈압'
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    createChart();
+</script>
+</body>
+</html>
