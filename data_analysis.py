@@ -12,8 +12,9 @@ plt.rcParams['font.family'] = 'NanumGothic'  # 한글 폰트로 나눔고딕 설
 
 df = pd.read_csv('C:/Users/김지민/Desktop/data/통합 5분 단위 수급현황.csv')
 
-data = pd.concat([df['공급능력(MW)'], df['현재수요(MW)'], df['최대예측수요(MW)'], df['공급예비력(MW)'], df['공급예비율(퍼센트)'], df['운영예비력(MW)'],
-                  df['운영예비율(퍼센트)']], axis=1)
+data = pd.concat(
+    [df['공급능력(MW)'], df['현재수요(MW)'], df['최대예측수요(MW)'], df['공급예비력(MW)'], df['공급예비율(퍼센트)'], df['운영예비력(MW)'],
+     df['운영예비율(퍼센트)']], axis=1)
 
 list = ['공급능력(MW)', '현재수요(MW)', '최대예측수요(MW)', '공급예비력(MW)', '공급예비율(퍼센트)', '운영예비력(MW)', '운영예비율(퍼센트)']
 
@@ -37,7 +38,7 @@ statistics_df = pd.DataFrame(statistics)
 print(tabulate(statistics_df, headers='keys', tablefmt='psql', showindex=True))
 
 
-def emwa(column):
+def emwa(column, df):
     X = df[column]
     s = [X.iat[0]]
     c = [X.iat[0]]
@@ -84,16 +85,16 @@ future.tail()
 # 미래 가격 예측하기
 forecast = prophet_m.predict(future)
 
-print(forecast[['ds', 'yhat', 'yhat_lower', 'yhat_upper']].tail())
+print(forecast[['ds', 'yhat', 'yhat_lower', 'yhat_upper']].head())
 
 fig1 = prophet_m.plot(forecast)
 
 fig2 = prophet_m.plot_components(forecast)
-start_date = '2024-01-01'
+'''start_date = '2024-01-01'
 end_date = '2024-06-07'
 
 ax = fig1.gca()
-ax.set_xlim(pd.to_datetime([start_date, end_date]))
+ax.set_xlim(pd.to_datetime([start_date, end_date]))'''
 
 fig1.show()
 fig2.show()
