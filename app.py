@@ -10,11 +10,11 @@ p = Predict_By_Prophet.Predict_By_Prophet()
 
 @app.route('/')
 def index():
+
     return render_template('index.html')
 
 
-@app.route('/data')
-def cal():
+def give_date():
     data = pd.read_csv('C:/Users/김지민/Desktop/data/통합 5분 단위 수급현황.csv')
 
     # data['기준일시'] = data['기준일시'].astype('int').astype('str')
@@ -31,7 +31,15 @@ def cal():
         'Dataset1': df['공급능력(MW)'],
         'Dataset2': df['현재수요(MW)']
     }
-    resampled_df = pd.DataFrame(resampled_data)
+    return pd.DataFrame(resampled_data)
+
+
+@app.route('/data')
+def cal():
+    param = request.args.get('param')
+    param = int(param) * -1
+    resampled_df = give_date()
+    resampled_df = resampled_df[param:]
     print(resampled_df.head())
     return resampled_df.to_json(orient='split')
 
@@ -48,7 +56,6 @@ def predict_cal():
     data = data[['기준일시', '현재수요(MW)']]
     data.set_index('기준일시', inplace=True)
     df1 = data.resample('D').mean().reset_index()
-
 
     df = p.predict()
 

@@ -21,7 +21,7 @@ list = ['공급능력(MW)', '현재수요(MW)', '최대예측수요(MW)', '공�
 for column in list:
     mean = data[column].mean()
     std = data[column].std()
-    data = data[(data[column] >= mean - 3 * std) & (data[column] <= mean + 3 * std)]
+    data = data[(data[column] >= mean - 4 * std) & (data[column] <= mean + 4 * std)]
 
 statistics = {
     '표본 개수': data.count(),
@@ -78,7 +78,24 @@ data1 = data1[-1000:]
 
 print(data1.head())
 
-prophet_m = Prophet().fit(data1)
+# prophet_m = Prophet().fit(data1)
+#prophet_m = Prophet().add_seasonality(name='weekly', period=7, fourier_order=10, prior_scale=1).fit(data1)
+# prophet_m = Prophet().add_seasonality(name='yearly', period= 365, fourier_order=10, prior_scale=0.1).fit(data1)
+'''prophet_m = Prophet(seasonality_mode='additive',
+                    seasonality_prior_scale=0.1,
+                    changepoint_prior_scale=0.5).fit(data1)'''
+'''
+prophet_m = Prophet(seasonality_mode='additive',
+                    seasonality_prior_scale=0.1,
+                    changepoint_prior_scale=0.5).fit(data1)'''
+
+prophet_m = (Prophet(changepoint_range=0.9,
+                     changepoint_prior_scale=0.01,
+                     interval_width=0.7
+                     )
+             .add_seasonality(name='weekly', period=7, fourier_order=10, prior_scale=0.1)
+             .fit(data1))
+
 
 future = prophet_m.make_future_dataframe(periods=30)
 future.tail()
@@ -88,6 +105,7 @@ forecast = prophet_m.predict(future)
 print(forecast[['ds', 'yhat', 'yhat_lower', 'yhat_upper']].head())
 
 fig1 = prophet_m.plot(forecast)
+a = add_changepoints_to_plot(fig1.gca(), prophet_m, forecast)
 
 fig2 = prophet_m.plot_components(forecast)
 '''start_date = '2024-01-01'
@@ -98,7 +116,8 @@ ax.set_xlim(pd.to_datetime([start_date, end_date]))'''
 
 fig1.show()
 fig2.show()
-df_n_cv = cross_validation(prophet_m, initial='300 days', period='60 days', horizon='30 days')
+# df_n_cv = cross_validation(prophet_m, initial='300 days', period='60 days', horizon='30 days')
+df_n_cv = cross_validation(prophet_m, initial='365 days', period='90 days', horizon='90 days')
 df_n_p = performance_metrics(df_n_cv)
 fig3 = plot_cross_validation_metric(df_n_cv, metric='mape')
 
@@ -107,6 +126,13 @@ s = 0
 for i in df_n_p['rmse']:
     s = s + i
 
-print("평균 rmse : " + str(s / 30))
+print("평균 rmse : " + str(s / len(df_n_p['rmse'])))
+
+s = 0
+for i in df_n_p['mape']:
+    s = s + i
+
+print("평균 mape : " + str(s / len(df_n_p['rmse'])))
+
 # 예측 기간에 따른 MAPE(오차율) 표시
 fig3.show()

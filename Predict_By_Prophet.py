@@ -1,18 +1,12 @@
-import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
-from tabulate import tabulate
 from prophet import Prophet
-from prophet.plot import add_changepoints_to_plot
-from prophet.diagnostics import cross_validation
-from prophet.plot import plot_cross_validation_metric
-from prophet.diagnostics import performance_metrics
+import joblib
+import pickle
 
 
 class Predict_By_Prophet:
 
-
-    def predict(self):
+    def save_predict_model(self):
         df = pd.read_csv('C:/Users/김지민/Desktop/data/통합 5분 단위 수급현황.csv')
         df['기준일시'] = pd.to_datetime(df['기준일시'])
         df.set_index('기준일시', inplace=True)
@@ -31,6 +25,13 @@ class Predict_By_Prophet:
 
         prophet_m = Prophet().fit(data1)
 
+        with open('saved_model', 'wb') as f:
+            pickle.dump(prophet_m, f)
+
+    def predict(self):
+        with open('saved_model', 'rb') as f:
+            prophet_m = pickle.load(f)
+
         future = prophet_m.make_future_dataframe(periods=30)
         future.tail()
         # 미래 가격 예측하기
@@ -39,4 +40,3 @@ class Predict_By_Prophet:
         print(forecast[['ds', 'yhat', 'yhat_lower', 'yhat_upper']].head())
 
         return forecast
-
