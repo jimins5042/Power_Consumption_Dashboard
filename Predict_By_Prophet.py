@@ -1,7 +1,6 @@
+import pickle
 import pandas as pd
 from prophet import Prophet
-import joblib
-import pickle
 
 
 class Predict_By_Prophet:
@@ -9,10 +8,12 @@ class Predict_By_Prophet:
     def save_predict_model(self):
         df = pd.read_csv('C:/Users/김지민/Desktop/data/통합 5분 단위 수급현황.csv')
         df['기준일시'] = pd.to_datetime(df['기준일시'])
+
         df.set_index('기준일시', inplace=True)
+
         data_r = df.resample('D').mean()
 
-        print(data_r.head())
+        print(data_r.tail())
 
         data_r = data_r.reset_index()
         data_r['ds'] = data_r['기준일시']
@@ -23,8 +24,7 @@ class Predict_By_Prophet:
 
         print(data1.head())
 
-        prophet_m = Prophet().fit(data1)
-
+        prophet_m = Prophet().add_seasonality(name='weekly', period=7, fourier_order=10, prior_scale=1).fit(data1)
         with open('saved_model', 'wb') as f:
             pickle.dump(prophet_m, f)
 
