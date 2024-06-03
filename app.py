@@ -1,14 +1,8 @@
+from flask import Flask, render_template, request, Response
+import json
 import pandas as pd
-from flask import Flask, render_template, request, jsonify,Response
-from tabulate import tabulate
-from urllib import parse
-
 import Chat_Bot
 import Predict_By_Prophet
-
-import json
-
-from functools import wraps
 
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
@@ -20,6 +14,11 @@ chat_res = Chat_Bot.Chat_bot()
 @app.route('/')
 def index():
     return render_template('index.html')
+
+
+@app.route('/show')
+def show_graph():
+    return render_template('Graph.html')
 
 
 @app.route('/predict')
@@ -64,9 +63,10 @@ def chat_rag():
     user_message = request.json
     response_message = generate_bot_response(user_message)
 
-    #한국어 인코딩
+    # 한국어 인코딩
     res = json.dumps(response_message, ensure_ascii=False).encode('utf8')
     return Response(res, content_type='application/json; charset=utf-8')
+
 
 def generate_bot_response(user_message):
     # 간단한 봇 응답 로직 (필요에 따라 수정 가능)
@@ -75,9 +75,15 @@ def generate_bot_response(user_message):
         return "안녕하세요! 무엇을 도와드릴까요?"
     elif user_message == "도움말":
         return "명령어 목록: !구매, !다시, !공유"
-    else:
-        return "죄송해요, 이해하지 못했어요."
 
+    elif user_message == "!임베딩":
+
+        chat_res.caching_flies()
+        return "자료 학습 완료!"
+
+    else:
+        answer = chat_res.caching_embeds(user_message)
+        return answer
 
 
 if __name__ == '__main__':

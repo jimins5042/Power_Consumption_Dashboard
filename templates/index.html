@@ -2,115 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Chart.js Example</title>
-    <label for="paramInput">파악할 과거 전력수요량 일수:</label>
-    <input type="text" id="paramInput" value="30">
-    <button onclick="createChartWithInput()">검색</button>
-
-
+    <title>Title</title>
 </head>
 <body>
-<div>
-    <canvas id="myChart" width="500" height="200"></canvas>
-
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
-
-<script>
-    let myChart;
-
-    function createChartWithInput() {
-        const param = document.getElementById('paramInput').value;
-        createChart(param);
-    }
-
-
-
-    async function fetchData(param) {
-        const response = await fetch(`/predict?param=${param}`);
-        const json = await response.json();
-        return json;
-    }
-
-
-    async function createChart(param) {
-
-
-        const data = await fetchData(param);
-
-        const labels = data.data.map(row => new Date(row[0])); // Convert dates to JavaScript Date objects
-        const dataset1 = data.data.map(row => row[1]);
-        const dataset2 = data.data.map(row => row[2]);
-        const dataset3 = data.data.map(row => row[3]);
-        const dataset4 = data.data.map(row => row[4]);
-
-        //const allData = dataset1.concat(dataset2, dataset3, dataset4);
-        //const minY = Math.min(...allData);
-        const minY = Math.min(...dataset4);
-
-        const ctx = document.getElementById('myChart').getContext('2d');
-        if (myChart) {
-            myChart.destroy();
-        }
-        myChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: '예측 전력',
-                    data: dataset1,
-                    //borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1,
-                    fill: false
-                }, {
-                    label: '예측 상한',
-                    data: dataset2,
-                    //borderColor: 'rgba(153, 102, 255, 1)',
-                    borderWidth: 1,
-                    fill: false
-                }, {
-                    label: '실제 값',
-                    data: dataset3,
-                    //borderColor: 'rgba(153, 102, 255, 1)',
-                    borderWidth: 1,
-                    fill: false
-                }]
-
-            },
-            options: {
-                scales: {
-                    x: {
-                        type: 'time',
-                        time: {
-                            unit: 'week',
-                            tooltipFormat: 'yyyy-MM-dd',
-                            displayFormats: {
-                                week: 'yyyy-MM-dd'
-                            }
-                        },
-                        title: {
-                            display: true,
-                            text: '날짜'
-                        }
-                    },
-                    y: {
-
-                        //beginAtZero: true,
-                        suggestedMin: minY,
-                        title: {
-                            display: true,
-                            text: '전력'
-                        }
-                    }
-                }
-            }
-        });
-    }
-
-
-    createChart(60);
-</script>
+<ul>
+    <li><a href="/show">그래프 표시</a></li>
+</ul>
+<ul>
+    <li><a href="/chat">챗봇</a></li>
+</ul>
 </body>
 </html>

@@ -121,8 +121,7 @@
 
     // 페이지가 로드되었을 때 기본 메시지를 추가
     window.addEventListener('load', () => {
-        const defaultMessages = ["안녕하세요!<br> 고객님에게 꼭 맞는 꽃 추천 챗봇, '피오나'입니다.<br>질문에 대한 답을 자세하게 작성할수록<br>" +
-        " 고객님이 원하시는 꽃을 찾을 수 있어요!", "성별과 연령대를 알려주세요."];
+        const defaultMessages = ["안녕하세요!<br> 전력거래소 관리 AI 입니다.", "무엇이 궁금하신가요?"];
         defaultMessages.forEach(message => {
             displayBotMessageWithLineBreak(message);
         });

@@ -1,26 +1,25 @@
-from langchain_community.document_loaders import UnstructuredFileLoader
 from langchain_community.vectorstores import Chroma
-from langchain_community.document_loaders import WebBaseLoader
 
-from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.runnables import RunnableParallel, RunnablePassthrough, RunnableLambda
-
-from langchain.text_splitter import CharacterTextSplitter
 from langchain.embeddings import CacheBackedEmbeddings
 from langchain.storage import LocalFileStore
-from langchain.chains.retrieval_qa.base import RetrievalQA
-
+from langchain.text_splitter import CharacterTextSplitter
+from langchain_community.document_loaders import WebBaseLoader
+from langchain_community.vectorstores import Chroma
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.runnables import RunnablePassthrough, RunnableLambda
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 
 import config
 import os
+import json
+
 
 class Chat_bot():
     def caching_flies(self):
         os.environ['OPENAI_API_KEY'] = config.OPENAI_API_KEY
 
         # 웹페이지 로더 설정
-        data_loader = WebBaseLoader("https://en.wikipedia.org/wiki/Moon")
+        data_loader = WebBaseLoader("https://namu.wiki/w/%ED%95%9C%EA%B5%AD%EC%A0%84%EB%A0%A5%EA%B1%B0%EB%9E%98%EC%86%8C")
         cache_dir = LocalFileStore("./.cache/")
 
         # 텍스트 분할 설정
@@ -38,7 +37,7 @@ class Chat_bot():
         vectorstore = Chroma.from_documents(docs, embeddings, persist_directory="./.cache/")
         vectorstore.persist()
 
-    def caching_embeds(self):
+    def caching_embeds(self, user_input):
         os.environ['OPENAI_API_KEY'] = config.OPENAI_API_KEY
 
         embeddings = OpenAIEmbeddings()
@@ -50,7 +49,15 @@ class Chat_bot():
 
         # 질의응답 체인 설정
         model = ChatOpenAI()
+        '''chain = RetrievalQA.from_chain_type(
+            llm=model,
+            chain_type="map_reduce",
+            retriever=retriever,
+        )
 
+        # 질문에 대한 답변 생성
+        answer = chain.invoke("화성에 사람이 처음 도착한 날짜는 언제야?")
+        print(answer)'''
 
         map_prompt = ChatPromptTemplate.from_messages(
             [
@@ -96,5 +103,13 @@ class Chat_bot():
 
         reduce_chain = {"context": map_results, "question": RunnablePassthrough()} | reduce_prompt | model
 
-        answer = reduce_chain.invoke("달에 사람이 처음 도착한 날짜는 언제야?")
-        print(answer)
+        answer = str(reduce_chain.invoke(str(user_input)))
+
+        start_index = answer.find("content='") + len("content='")
+        end_index = answer.find("'", start_index)
+
+        # content 값 추출
+        return answer[start_index:end_index]
+
+
+        #return answer
