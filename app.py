@@ -70,20 +70,22 @@ def chat_rag():
 
 def generate_bot_response(user_message):
     # 간단한 봇 응답 로직 (필요에 따라 수정 가능)
-    if user_message == "안녕":
 
-        return "안녕하세요! 무엇을 도와드릴까요?"
-    elif user_message == "도움말":
-        return "명령어 목록: !구매, !다시, !공유"
+    answer = str
+    if user_message == "안녕":
+        answer = "안녕하세요! 무엇을 도와드릴까요?"
+
+    elif user_message == "!도움말":
+        answer = "명령어 목록: !구매, !다시, !공유"
 
     elif user_message == "!임베딩":
-
         chat_res.caching_flies()
-        return "자료 학습 완료!"
+        answer = "자료 학습 완료!"
 
     else:
         answer = chat_res.caching_embeds(user_message)
-        return answer
+
+    return answer
 
 
 if __name__ == '__main__':

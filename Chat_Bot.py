@@ -1,5 +1,3 @@
-from langchain_community.vectorstores import Chroma
-
 from langchain.embeddings import CacheBackedEmbeddings
 from langchain.storage import LocalFileStore
 from langchain.text_splitter import CharacterTextSplitter
@@ -8,10 +6,8 @@ from langchain_community.vectorstores import Chroma
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough, RunnableLambda
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
-
-import config
 import os
-import json
+import config
 
 
 class Chat_bot():
