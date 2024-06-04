@@ -65,7 +65,7 @@ def emwa(column, df):
 
 df['기준일시'] = pd.to_datetime(df['기준일시'])
 df.set_index('기준일시', inplace=True)
-data_r = df.resample('D').mean()
+data_r = df.resample('h').mean()
 
 print(data_r.head())
 
@@ -74,7 +74,7 @@ data_r['ds'] = data_r['기준일시']
 data_r['y'] = data_r['현재수요(MW)']
 
 data1 = data_r[['ds', 'y']]
-data1 = data1[-1000:]
+#data1 = data1[-1000:]
 
 print(data1.head())
 

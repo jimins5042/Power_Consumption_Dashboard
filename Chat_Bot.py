@@ -45,15 +45,6 @@ class Chat_bot():
 
         # 질의응답 체인 설정
         model = ChatOpenAI()
-        '''chain = RetrievalQA.from_chain_type(
-            llm=model,
-            chain_type="map_reduce",
-            retriever=retriever,
-        )
-
-        # 질문에 대한 답변 생성
-        answer = chain.invoke("화성에 사람이 처음 도착한 날짜는 언제야?")
-        print(answer)'''
 
         map_prompt = ChatPromptTemplate.from_messages(
             [
@@ -106,6 +97,3 @@ class Chat_bot():
 
         # content 값 추출
         return answer[start_index:end_index]
-
-
-        #return answer

@@ -71,7 +71,7 @@ def chat_rag():
 def generate_bot_response(user_message):
     # 간단한 봇 응답 로직 (필요에 따라 수정 가능)
 
-    answer = str
+    answer = ""
     if user_message == "안녕":
         answer = "안녕하세요! 무엇을 도와드릴까요?"
 
