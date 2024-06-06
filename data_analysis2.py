@@ -20,8 +20,8 @@ supply_df = supply_df.fillna('')
 
 # 필요한 데이터 추출 및 전처리
 data = pd.concat([weather_df['일시'], weather_df['기온(°C)'], weather_df['습도(%)']], axis=1)
-data_f = data[data['일시'] >= "2024-05-18"]
-data = data[data['일시'] < "2024-05-18"]
+data_f = data[data['일시'] >= "2024-05-17 09:15:00"]
+data = data[data['일시'] < "2024-05-17 09:15:00"]
 print(data.tail())
 
 # 기준일시를 datetime 형식으로 변환 및 인덱스로 설정
@@ -81,6 +81,7 @@ future['습도'] = weather_df['습도(%)'].values[:len(future)]
 forecast = prophet_m.predict(future)
 print(forecast[['ds', 'yhat', 'yhat_lower', 'yhat_upper']].tail())
 
+
 # 예측 결과 시각화
 fig1 = prophet_m.plot(forecast)
 a = add_changepoints_to_plot(fig1.gca(), prophet_m, forecast)
@@ -89,7 +90,7 @@ fig1.show()
 fig2.show()
 
 # 교차 검증 및 성능 평가
-df_n_cv = cross_validation(prophet_m, initial='1095 days', period='90 days', horizon='240 hours')
+df_n_cv = cross_validation(prophet_m, initial='365 days', period='90 days', horizon='240 hours')
 df_n_p = performance_metrics(df_n_cv)
 fig3 = plot_cross_validation_metric(df_n_cv, metric='mape')
 print(df_n_p)
