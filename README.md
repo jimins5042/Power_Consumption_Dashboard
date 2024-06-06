@@ -42,5 +42,6 @@
 
 # 구현 과정
 
-[![Velog's GitHub stats](https://velog-readme-stats.vercel.app/api?name=2jooin1207)]([https://github.com/eungyeole/velog-readme-stats](https://velog.io/@2jooin1207/series/%EC%A0%84%EB%A0%A5%EC%88%98%EA%B8%89%ED%98%84%ED%99%A9-%EC%98%88%EC%B8%A1-%EB%B0%8F-%EA%B4%80%EB%A6%AC-%EC%8B%9C%EC%8A%A4%ED%85%9C-%EB%A7%8C%EB%93%A4%EA%B8%B0))
+[![Velog's GitHub stats](https://velog-readme-stats.vercel.app/api?name=2jooin1207&slug=전력수급현황-예측-및-관리-시스템-만들기-개요)](https://velog.io/@2jooin1207/%EC%A0%84%EB%A0%A5%EC%88%98%EA%B8%89%ED%98%84%ED%99%A9-%EC%98%88%EC%B8%A1-%EB%B0%8F-%EA%B4%80%EB%A6%AC-%EC%8B%9C%EC%8A%A4%ED%85%9C-%EB%A7%8C%EB%93%A4%EA%B8%B0-%EA%B0%9C%EC%9A%94)
+
 
