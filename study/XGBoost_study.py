@@ -14,6 +14,7 @@ plt.rcParams['font.family'] = 'NanumGothic'  # 한글 폰트로 나눔고딕 설
 
 # CSV 파일 읽기
 weather_df = pd.read_csv('C:/Users/김지민/Desktop/data/기상 데이터.csv')
+
 supply_df = pd.read_csv('C:/Users/김지민/Desktop/data/통합 5분 단위 수급현황.csv')
 
 # NaN 값을 확인하고 빈 문자열로 대체
@@ -31,7 +32,6 @@ supply_df['기준일시'] = pd.to_datetime(supply_df['기준일시'])
 supply_df.set_index('기준일시', inplace=True)
 data_r = supply_df.resample('h').mean()
 
-print(data_r.head())
 
 # 데이터 병합 및 전처리
 data_r = data_r.reset_index()
@@ -46,7 +46,9 @@ data = data.iloc[:min_length]
 data_r['기온'] = data['기온(°C)'].values
 data_r['습도'] = data['습도(%)'].values
 
+
 data1 = data_r[['ds', 'y', '기온', '습도']]
+print(data1.head())
 
 # NaN 값 제거
 data1 = data1.dropna(axis=0)
@@ -84,17 +86,18 @@ with open('xgboost_saved_model', 'rb') as f:
 # 예측 수행
 predictions = model.predict(X_test)
 
+
 # 데이터 반정규화
 predictions = scaler.inverse_transform(np.concatenate((np.zeros((predictions.shape[0], 2)), predictions.reshape(-1, 1)), axis=1))[:, 2]
 y_test = scaler.inverse_transform(np.concatenate((np.zeros((y_test.shape[0], 2)), y_test.reshape(-1, 1)), axis=1))[:, 2]
 
 
-
 test_dates = data1['ds'][-len(y_test):]
+test_Actual = data1['y'][-len(y_test):]
 
 
 # 일부 예측값과 실제값을 비교하기 위해 데이터프레임 생성
-comparison = pd.DataFrame({'Date': test_dates, 'Actual': y_test, 'Predicted': predictions})
+comparison = pd.DataFrame({'Date': test_dates, 'test_Actual': test_Actual,'Actual': y_test, 'Predicted': predictions})
 
 # 날짜를 인덱스로 설정
 comparison.set_index('Date', inplace=True)
@@ -106,6 +109,10 @@ print(comparison.tail(24))
 plt.figure(figsize=(14,5))
 plt.plot(data.index[-len(y_test):], y_test, label='Actual Power Demand')
 plt.plot(data.index[-len(y_test):], predictions, label='Predicted Power Demand')
+
+#plt.plot(data.index[-240:], y_test, label='Actual Power Demand')
+#plt.plot(data.index[-240:], predictions, label='Predicted Power Demand')
+
 plt.xlabel('Date')
 plt.ylabel('Power Demand')
 plt.legend()
@@ -116,6 +123,11 @@ mse = mean_squared_error(y_test, predictions)
 rmse = np.sqrt(mean_squared_error(y_test, predictions))
 mape = mean_absolute_percentage_error(y_test, predictions)
 
-print(f'Root Mean Squared Error (RMSE): {rmse}')
-print(f'Mean Absolute Percentage Error (MAPE): {mape}')
-print(f'Mean Squared Error: {mse}')
+print(f'RMSE: {rmse}')
+print(f'MAPE: {mape}')
+print(f'mse: {mse}')
+
+
+test_dates = data1['ds'][-len(y_test):]
+test_Actual = data1['y'][-len(y_test):]
+
