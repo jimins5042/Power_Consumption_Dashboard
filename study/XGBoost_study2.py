@@ -20,7 +20,7 @@ weather_df = weather_df.fillna('')
 supply_df = supply_df.fillna('')
 
 # 필요한 데이터 추출 및 전처리
-data = pd.concat([weather_df['일시'], weather_df['기온(°C)'], weather_df['습도(%)'], weather_df['요일']], axis=1)
+data = pd.concat([weather_df['일시'], weather_df['기온(°C)'], weather_df['습도(%)'], weather_df['요일'], weather_df['시간']], axis=1)
 data_f = data[data['일시'] >= "2024-05-17 09:15:00"]
 data = data[data['일시'] < "2024-05-17 09:15:00"]
 print(data.tail())
@@ -30,7 +30,7 @@ supply_df['기준일시'] = pd.to_datetime(supply_df['기준일시'])
 supply_df.set_index('기준일시', inplace=True)
 data_r = supply_df.resample('h').mean()
 
-print(data_r.head())
+
 
 # 데이터 병합 및 전처리
 data_r = data_r.reset_index()
@@ -46,13 +46,18 @@ data_r['기온'] = data['기온(°C)'].values
 data_r['습도'] = data['습도(%)'].values
 
 data_r['요일'] = data['요일'].values
+data_r['시간'] = data['시간'].values
 
-data1 = data_r[['ds', 'y', '기온', '습도', '요일']]
+data1 = data_r[['ds', 'y', '기온', '습도', '요일','시간']]
 
 # NaN 값 제거
 data1 = data1.dropna(axis=0)
+
 # 필요한 컬럼 선택
-dataset = data1[['y', '기온', '습도', '요일']]
+dataset = data1[['y', '기온', '습도', '요일','시간']]
+
+
+print(dataset.head())
 
 # 데이터셋을 학습셋과 테스트셋으로 분리 (80% 학습, 20% 테스트)
 train_size = int(len(dataset) * 0.8)
@@ -77,9 +82,9 @@ plt.legend()
 plt.show()
 
 # 성능 평가
-mse = mean_squared_error(test_set['y'], predictions)
+mse = mean_squared_error(test_set['y'][:240], predictions[:240])
 rmse = np.sqrt(mse)
-mape = mean_absolute_percentage_error(test_set['y'], predictions)
+mape = mean_absolute_percentage_error(test_set['y'][:240], predictions[:240])
 
 print(f'RMSE: {rmse}')
 print(f'MAPE: {mape}')
