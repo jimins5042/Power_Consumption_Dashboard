@@ -55,7 +55,7 @@ def cal(date):
     data_r['풍속'] = data['풍속(m/s)'].astype(int).values
     data_r['휴일'] = data['휴일여부'].astype(int).values
 
-    data1 = data_r[['ds', 'y', '기온', '습도', '요일', '시간', '1일전', '전운량', '풍속', '휴일']]
+    data1 = data_r[['ds', 'y', '기온', '습도', '풍속', '전운량','요일', '시간', '휴일', '1일전']]
     # data1 = data_r[['ds', 'y', '기온', '습도', '요일', '시간', '1일전']]
     # data1 = data1.dropna(axis=0)
     data1 = data1.ffill()
@@ -105,6 +105,8 @@ def cal(date):
     print(f'MAPE: {mape}')
     print(f'MSE: {mse}')
 
+    return rmse, mape
+
     '''comparison = pd.DataFrame({
         'Date': test_set.index,
         'Actual Power Demand': test_set['y'].values,
@@ -132,7 +134,18 @@ list = {"2023-05-01",
         "2024-04-01",
         "2024-05-01"}
 
+rmse = 0
+mape = 0
 for i in list:
     print(i)
-    cal(i)
+    x, y = cal(i)
+    rmse = rmse + x
+    mape = mape + y
+
     time.sleep(1)
+rmse = rmse/len(list)
+mape = mape/len(list)
+
+print("\n 전체 평균")
+print(f'RMSE: {rmse}')
+print(f'MAPE: {mape}')

@@ -1,13 +1,15 @@
-from flask import Flask, render_template, request, Response
+from flask import Flask, render_template, request, Response, jsonify
 import json
 import pandas as pd
 import Chat_Bot
 import Predict_By_Prophet
+import Predict_Model
+
 
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
 
-p = Predict_By_Prophet.Predict_By_Prophet()
+p = Predict_Model.Predict_Model()
 chat_res = Chat_Bot.Chat_bot()
 
 
@@ -23,32 +25,24 @@ def show_graph():
 
 @app.route('/predict')
 def predict_cal():
-    data = pd.read_csv('C:/Users/김지민/Desktop/data/통합 5분 단위 수급현황.csv')
+    supply_df = pd.read_csv('C:/Users/김지민/Desktop/data/HOME_전력수급_실시간전력수급.csv')
+    supply_df['일시'] = pd.to_datetime(supply_df['일시'])
+    supply_df.set_index('일시', inplace=True)
+    data_r = supply_df.resample('H').mean().reset_index()
 
-    data['기준일시'] = pd.to_datetime(data['기준일시'])
-
-    data = data.dropna(axis=0)  # 0제거
-
-    data = data[['기준일시', '현재수요(MW)']]
-    data.set_index('기준일시', inplace=True)
-    df1 = data.resample('D').mean().reset_index()
-
-    df = p.predict()
+    # df = p.predict_XGBoost(data_r)
 
     resampled_data = {
-        'Month': df['ds'],
-        'Dataset1': df['yhat'],
-        'Dataset2': df['yhat_upper'],
-        'Dataset3': df1['현재수요(MW)'],
-        'Dataset4': df['yhat_lower'],
+        'Month': data_r['일시'].astype(str),
+        'Dataset1': data_r['현재부하(MW)'],
+        # 'Dataset2': df
+        'Dataset2': data_r['현재부하(MW)']
     }
-
-    resampled_df = pd.DataFrame(resampled_data)
-
     param = request.args.get('param')
     param = int(param) * -1
 
-    resampled_df = resampled_df[param:]
+    resampled_df = pd.DataFrame(resampled_data)
+
     print(resampled_df.head())
     return resampled_df.to_json(orient='split')
 
@@ -61,6 +55,7 @@ def chat():
 @app.route('/chat', methods=["POST"])
 def chat_rag():
     user_message = request.json
+
     response_message = generate_bot_response(user_message)
 
     # 한국어 인코딩

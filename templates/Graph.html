@@ -27,13 +27,11 @@
     }
 
 
-
     async function fetchData(param) {
         const response = await fetch(`/predict?param=${param}`);
         const json = await response.json();
         return json;
     }
-
 
     async function createChart(param) {
 
@@ -41,14 +39,14 @@
         const data = await fetchData(param);
 
         const labels = data.data.map(row => new Date(row[0])); // Convert dates to JavaScript Date objects
+
         const dataset1 = data.data.map(row => row[1]);
         const dataset2 = data.data.map(row => row[2]);
-        const dataset3 = data.data.map(row => row[3]);
-        const dataset4 = data.data.map(row => row[4]);
 
-        //const allData = dataset1.concat(dataset2, dataset3, dataset4);
-        //const minY = Math.min(...allData);
-        const minY = Math.min(...dataset4);
+
+        const allData = dataset1.concat(dataset2);
+        const minY = Math.min(...allData);
+        //const minY = Math.min(...dataset1);
 
         const ctx = document.getElementById('myChart').getContext('2d');
         if (myChart) {
@@ -59,36 +57,37 @@
             data: {
                 labels: labels,
                 datasets: [{
-                    label: '예측 전력',
+                    label: '1일전 전력',
                     data: dataset1,
                     //borderColor: 'rgba(75, 192, 192, 1)',
                     borderWidth: 1,
                     fill: false
                 }, {
-                    label: '예측 상한',
+                    label: '예측 전력',
                     data: dataset2,
-                    //borderColor: 'rgba(153, 102, 255, 1)',
-                    borderWidth: 1,
-                    fill: false
-                }, {
-                    label: '실제 값',
-                    data: dataset3,
-                    //borderColor: 'rgba(153, 102, 255, 1)',
+                    //borderColor: 'rgba(75, 192, 192, 1)',
                     borderWidth: 1,
                     fill: false
                 }]
 
             },
             options: {
+
                 scales: {
                     x: {
                         type: 'time',
-                        time: {
-                            unit: 'week',
-                            tooltipFormat: 'yyyy-MM-dd',
+
+
+                        time: {unit: 'hour',
+                            tooltipFormat: 'yyyy-MM-dd HH:mm',
                             displayFormats: {
-                                week: 'yyyy-MM-dd'
+                                hour: 'HH:mm'
                             }
+
+                            //displayFormats: {
+                             //   hour: 'HH:mm'
+                            //}
+
                         },
                         title: {
                             display: true,
@@ -102,6 +101,22 @@
                         title: {
                             display: true,
                             text: '전력'
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        titleFont: {size: 25},
+                        bodyFont: {size: 20, color: '#000'},
+                        callbacks: {
+
+                            label: function (context) {
+                                const label = context.dataset.label || '';
+                                const value = Math.round(context.raw);
+
+
+                                return `${label}: ${value} `;
+                            },
                         }
                     }
                 }
