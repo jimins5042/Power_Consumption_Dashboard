@@ -1,11 +1,9 @@
 import json
 import pickle
-from datetime import datetime
-
+from datetime import datetime, timedelta
 import holidays
 import pandas as pd
 import requests
-
 import config
 
 
@@ -28,6 +26,7 @@ class Predict_Model:
 
         serviceKey = config.serviceKey
 
+        #base_date = (datetime.today() - timedelta(1)).strftime("%Y%m%d")
         base_date = '20240614'  # 발표 일자
         base_time = '2300'  # 발표 시간
         nx = '62'  # 예보 지점 x좌표

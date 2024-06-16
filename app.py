@@ -20,7 +20,8 @@ def index():
 
 @app.route('/show')
 def show_graph():
-    return render_template('Graph.html')
+    #return render_template('Graph.html')
+    return render_template('dashboard.html')
 
 
 @app.route('/predict')

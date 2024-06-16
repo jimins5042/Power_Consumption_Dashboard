@@ -6,6 +6,7 @@ import pickle
 import pandas as pd
 import holidays
 
+
 serviceKey = config.serviceKey
 # --> 날씨를 알고 싶은 시간 입력
 base_date = '20240614'  # 발표 일자
