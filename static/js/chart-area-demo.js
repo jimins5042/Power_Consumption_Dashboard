@@ -16,7 +16,9 @@ async function createChart() {
     const dataset2 = data.data.map(row => row[2]);
 
     const allData = dataset1.concat(dataset2);
-    const minY = Math.min(...allData);
+
+
+    const minY = Math.min(dataset2);
 
     const ctx = document.getElementById('myAreaChart').getContext('2d');
     if (myChart) {

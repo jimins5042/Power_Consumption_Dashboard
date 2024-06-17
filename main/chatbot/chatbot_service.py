@@ -10,12 +10,13 @@ import os
 import config
 
 
-class Chat_bot():
+class chatbot_service:
     def caching_flies(self):
         os.environ['OPENAI_API_KEY'] = config.OPENAI_API_KEY
 
         # 웹페이지 로더 설정
-        data_loader = WebBaseLoader("https://namu.wiki/w/%ED%95%9C%EA%B5%AD%EC%A0%84%EB%A0%A5%EA%B1%B0%EB%9E%98%EC%86%8C")
+        data_loader = WebBaseLoader(
+            "https://namu.wiki/w/%ED%95%9C%EA%B5%AD%EC%A0%84%EB%A0%A5%EA%B1%B0%EB%9E%98%EC%86%8C")
         cache_dir = LocalFileStore("./.cache/")
 
         # 텍스트 분할 설정
