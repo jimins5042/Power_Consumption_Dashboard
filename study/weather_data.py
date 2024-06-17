@@ -5,11 +5,13 @@ import config
 import pickle
 import pandas as pd
 import holidays
-
+import xmltodict
+import xml.etree.ElementTree as ET
+import json
 
 serviceKey = config.serviceKey
 # --> 날씨를 알고 싶은 시간 입력
-base_date = '20240614'  # 발표 일자
+base_date = '20240616'  # 발표 일자
 base_time = '2300'  # 발표 시간
 nx = '62'  # 예보 지점 x좌표
 ny = '123'  # 예보 지점 y좌표
@@ -20,37 +22,37 @@ ny = '123'  # 예보 지점 y좌표
 url = f"http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey={serviceKey}&numOfRows=290&pageNo=1&dataType=json&base_date={base_date}&base_time={base_time}&nx={nx}&ny={ny}"
 
 response = requests.get(url, verify=False)
-res = json.loads(response.text)
 
-informations = dict()
-for items in res['response']['body']['items']['item']:
-    cate = items['category']
-    fcstDate = items['fcstDate']
-    fcstTime = items['fcstTime']
-    fcstValue = items['fcstValue']
-    temp = dict()
-    temp[cate] = fcstValue
+res = response.json()
+weather_df = pd.DataFrame(res['response']['body']['items']['item'])
 
-    if fcstTime not in informations:
-        informations[fcstTime] = {'fcstDate': fcstDate}
+weather_df['fcstValue'] = pd.to_numeric(weather_df['fcstValue'], errors='coerce')
 
-    informations[fcstTime][cate] = fcstValue
+pivot_df = weather_df.pivot_table(
+    index=['baseDate', 'baseTime', 'fcstDate', 'fcstTime', 'nx', 'ny'],
+    columns='category',
+    values='fcstValue'
+).reset_index()
 
-print(informations)
+# 결과 출력
+print(pivot_df.head())
 
-isholiday = 0
 
-if fcstDate in holidays.KR():
-    isholiday = 1
 data = []
-for key, val in informations.items():
-    fcst_date = val.get('fcstDate', '')
-    tmp_temp = float(val.get('TMP', 0))
-    reh_temp = float(val.get('REH', 0))
-    wsd_temp = float(val.get('WSD', 0))
-    sky_temp = int(val.get('SKY', 0))
-    hour = int(key[:2])
-    minute = int(key[2:])
+for row in pivot_df.itertuples():
+
+    fcst_date = getattr(row, 'fcstDate')
+    tmp_temp = float(getattr(row, 'TMP'))
+    reh_temp = float(getattr(row, 'REH'))
+    wsd_temp = float(getattr(row, 'WSD'))
+    sky_temp = int(getattr(row, 'SKY'))
+
+    if fcst_date in holidays.KR():
+        holiday = 1
+    else:
+        holiday = 0
+
+    hour = int(getattr(row, 'fcstTime')[:2])
 
     data.append({
         '날짜': fcst_date,
@@ -59,9 +61,16 @@ for key, val in informations.items():
         '풍속': wsd_temp,
         '전운량': sky_temp,
         '요일': datetime.strptime(fcst_date, '%Y%m%d').weekday() if fcst_date else None,
-        '휴일': isholiday,
+        '휴일': holiday,
         '시간': hour
+
     })
+
+# Convert to DataFrame
+df = pd.DataFrame(data)
+print("?")
+print(df.head())
+
 
 # Convert to DataFrame
 df = pd.DataFrame(data)
@@ -85,3 +94,4 @@ with open('xgboost_saved_model_240516', 'rb') as f:
 predictions = model.predict(data1.drop(columns=['ds']))
 
 print(predictions)
+

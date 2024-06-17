@@ -1,19 +1,15 @@
 let myChart;
 let dataTable;
 
-function createChartWithInput() {
-    const param = document.getElementById('paramInput').value;
-    createChart(param);
-}
 
-async function fetchData(param) {
-    const response = await fetch(`/predict?param=${param}`);
+async function fetchData() {
+    const response = await fetch(`/predict`);
     const json = await response.json();
     return json;
 }
 
-async function createChart(param) {
-    const data = await fetchData(param);
+async function createChart() {
+    const data = await fetchData();
 
     const labels = data.data.map(row => new Date(row[0])); // Convert dates to JavaScript Date objects
     const dataset1 = data.data.map(row => row[1]);
@@ -35,7 +31,7 @@ async function createChart(param) {
                 data: dataset1,
                 borderWidth: 1,
                 backgroundColor: '#00C7E2',
-                borderColor : '#00C7E2',
+                borderColor: '#00C7E2',
                 fill: false
             }, {
                 label: '예측 전력',
@@ -109,11 +105,11 @@ async function createChart(param) {
         tr.appendChild(dateTd);
 
         const dataset1Td = document.createElement('td');
-        dataset1Td.textContent = row[1];
+        dataset1Td.textContent = parseFloat(row[1]).toFixed(2);
         tr.appendChild(dataset1Td);
 
         const dataset2Td = document.createElement('td');
-        dataset2Td.textContent = row[2];
+        dataset2Td.textContent = parseFloat(row[2]).toFixed(2);
         tr.appendChild(dataset2Td);
 
         tableBody.appendChild(tr);
@@ -124,4 +120,4 @@ async function createChart(param) {
 
 }
 
-createChart(60);
+createChart();
