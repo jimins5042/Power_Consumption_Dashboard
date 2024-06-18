@@ -81,10 +81,10 @@ class Predict_Model:
 
             })
 
-        # Convert to DataFrame
+
         df = pd.DataFrame(data)
 
-        # Load and process the supply data
+
         '''supply_df = pd.read_csv('C:/Users/김지민/Desktop/data/HOME_전력수급_실시간전력수급.csv')
         supply_df['일시'] = pd.to_datetime(supply_df['일시'])
         supply_df.set_index('일시', inplace=True)
@@ -95,7 +95,7 @@ class Predict_Model:
 
         data1 = df[['ds', '기온', '습도', '전운량', '풍속', '요일', '시간', '휴일', '1일전']]
 
-        # Display the result
+
         print(data1.head())
 
         with open('xgboost_saved_model_240516', 'rb') as f:

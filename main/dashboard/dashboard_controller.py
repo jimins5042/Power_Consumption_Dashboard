@@ -10,12 +10,12 @@ service = dashboard_service.dashboard_service()
 class dashboard_controller:
     p = Predict_Model.Predict_Model()
 
-    @ds.route('/show')
+    @ds.route('/show', methods=['GET'])
     def show_graph():
         # return render_template('Graph.html')
         return render_template('dashboard.html')
+
     @ds.route('/show', methods=['POST'])
-    #@ds.route('/predict')
     def predict_cal():
         supply_df = pd.read_csv('C:/Users/김지민/Desktop/data/HOME_전력수급_실시간전력수급.csv')
         supply_df['일시'] = pd.to_datetime(supply_df['일시'])
@@ -53,19 +53,19 @@ class dashboard_controller:
         return render_template('power_transaction.html')
 
     @ds.route('/power', methods=['POST'])
-    #@ds.route('/power_supply')
     def show_SMP():
         print("show_SMP")
         smp_df = service.get_smpPrice()
         smp_df['timetable'] = pd.to_datetime(
-            smp_df['tradeDay'].astype(str) + smp_df['tradeHour'].astype(str).str.zfill(2), format='%Y%m%d%H').dt.strftime('%Y-%m-%d %H')
+            smp_df['tradeDay'].astype(str) + smp_df['tradeHour'].astype(str).str.zfill(2),
+            format='%Y%m%d%H').dt.strftime('%Y-%m-%d %H')
 
         label = smp_df['timetable'].astype(str)
         price_history = smp_df['smp']
 
         stock_data = {
             "Month": label,
-            #"Month": smp_df['tradeHour'].astype(str),
+            # "Month": smp_df['tradeHour'].astype(str),
             "Dataset1": price_history
         }
 
