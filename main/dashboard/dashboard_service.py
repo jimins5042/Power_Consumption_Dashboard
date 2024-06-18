@@ -33,3 +33,17 @@ class dashboard_service:
         data_r = df.resample('H').mean().reset_index()
 
         return data_r
+
+    def get_smpPrice(self):
+        url = f'https://openapi.kpx.or.kr/openapi/smp1hToday/getSmp1hToday?areaCd=1&serviceKey={config.serviceKey}'
+        response = requests.get(url, verify=False)
+        res = xmltodict.parse(response.text)
+
+        smp_df = pd.DataFrame(res['response']['body']['items']['item'])
+        smp_df = smp_df.drop(columns=['areaCd'])
+
+
+        smp_df['smp'] = smp_df['smp'].astype(float)
+        print('get_smpPrice')
+
+        return smp_df

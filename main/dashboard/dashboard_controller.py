@@ -1,7 +1,6 @@
 import pandas as pd
 from flask import render_template, Blueprint
 
-
 from main.dashboard import dashboard_service, Predict_Model
 
 ds = Blueprint("dashboard_controller", __name__)
@@ -13,7 +12,7 @@ class dashboard_controller:
 
     @ds.route('/show')
     def show_graph():
-        #return render_template('Graph.html')
+        # return render_template('Graph.html')
         return render_template('dashboard.html')
 
     @ds.route('/predict')
@@ -27,7 +26,7 @@ class dashboard_controller:
 
         df['1일전'] = data_r['현재수요']
 
-        #data_r['1일전'] = df['현재부하(MW)']
+        # data_r['1일전'] = df['현재부하(MW)']
         print(data_r.head())
 
         # df = p.predict_XGBoost(data_r)
@@ -47,3 +46,28 @@ class dashboard_controller:
 
         print(resampled_df.head())
         return resampled_df.to_json(orient='split')
+
+    @ds.route('/power', methods=['GET'])
+    def SMP():
+        print('SMP')
+        return render_template('power_transaction.html')
+
+    @ds.route('/power_supply')
+    def show_SMP():
+        print("show_SMP")
+        smp_df = service.get_smpPrice()
+        smp_df['timetable'] = pd.to_datetime(
+            smp_df['tradeDay'].astype(str) + smp_df['tradeHour'].astype(str).str.zfill(2), format='%Y%m%d%H').dt.strftime('%Y-%m-%d %H')
+
+        label = smp_df['timetable'].astype(str)
+        price_history = smp_df['smp']
+
+        stock_data = {
+            "Month": label,
+            #"Month": smp_df['tradeHour'].astype(str),
+            "Dataset1": price_history
+        }
+
+        stock_data = pd.DataFrame(stock_data)
+        print(stock_data.tail())
+        return stock_data.to_json(orient='split')

@@ -3,7 +3,7 @@ let dataTable;
 
 
 async function fetchData() {
-    const response = await fetch(`/predict`);
+    const response = await fetch(`/power_supply`);
     const json = await response.json();
     return json;
 }
@@ -117,7 +117,10 @@ async function createChart() {
         tableBody.appendChild(tr);
     });
     dataTable = $('#dataTable').DataTable({
-        pageLength: 10
+        pageLength: 10,
+        columnDefs: [
+            {className: 'text-center', targets: '_all'} // Apply to all columns
+        ]
     });
 
 }
