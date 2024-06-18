@@ -16,8 +16,6 @@ async function createChart() {
     const dataset2 = data.data.map(row => row[2]);
 
     const allData = dataset1.concat(dataset2);
-
-
     const minY = Math.min(dataset2);
 
     const ctx = document.getElementById('myAreaChart').getContext('2d');
@@ -84,6 +82,7 @@ async function createChart() {
             }
         }
     });
+
     if ($.fn.DataTable.isDataTable('#dataTable')) {
         dataTable.clear().destroy();
     }

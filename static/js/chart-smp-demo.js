@@ -1,13 +1,32 @@
 let myChart;
 
-async function fetchData() {
-    const response = await fetch(`/power_supply`);
-    const json = await response.json();
+
+$(document).ready(function () {
+    $.ajax({
+        type: 'POST',
+        url: '/power',  // Flask 라우트의 URL
+        success: function (response) {
+            // 서버에서 받은 JSON 데이터 처리
+            console.log("데이터 받아오기");
+            createChart(response);
+
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    });
+});
+
+
+async function fetchData(response) {
+    //const response = await fetch(`/power_supply`);
+    const json = JSON.parse(response);
+    //const json = await response.json();
     return json;
 }
 
-async function createChart() {
-    const data = await fetchData();
+async function createChart(response) {
+    const data = await fetchData(response);
 
     //const labels = data.data.map(row => new Date(row[0])); // Convert dates to JavaScript Date objects
     const labels = data.data.map(row => (row[0])); // Convert dates to JavaScript Date objects
@@ -69,4 +88,4 @@ async function createChart() {
 
 }
 
-createChart();
+//createChart();

@@ -52,7 +52,8 @@ class dashboard_controller:
         print('SMP')
         return render_template('power_transaction.html')
 
-    @ds.route('/power_supply')
+    @ds.route('/power', methods=['POST'])
+    #@ds.route('/power_supply')
     def show_SMP():
         print("show_SMP")
         smp_df = service.get_smpPrice()
