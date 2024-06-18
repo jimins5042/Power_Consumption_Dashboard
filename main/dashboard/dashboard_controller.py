@@ -14,8 +14,8 @@ class dashboard_controller:
     def show_graph():
         # return render_template('Graph.html')
         return render_template('dashboard.html')
-
-    @ds.route('/predict')
+    @ds.route('/show', methods=['POST'])
+    #@ds.route('/predict')
     def predict_cal():
         supply_df = pd.read_csv('C:/Users/김지민/Desktop/data/HOME_전력수급_실시간전력수급.csv')
         supply_df['일시'] = pd.to_datetime(supply_df['일시'])
