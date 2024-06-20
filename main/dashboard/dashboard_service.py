@@ -42,8 +42,12 @@ class dashboard_service:
         smp_df = pd.DataFrame(res['response']['body']['items']['item'])
         smp_df = smp_df.drop(columns=['areaCd'])
 
-
         smp_df['smp'] = smp_df['smp'].astype(float)
+
+        smp_df['timetable'] = pd.to_datetime(
+            smp_df['tradeDay'].astype(str) + smp_df['tradeHour'].astype(str).str.zfill(2),
+            format='%Y%m%d%H')#.dt.strftime('%Y-%m-%d %H')
+
         print('get_smpPrice')
 
         return smp_df

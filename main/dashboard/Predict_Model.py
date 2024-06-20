@@ -27,7 +27,8 @@ class Predict_Model:
         serviceKey = config.serviceKey
 
         # base_date = (datetime.today() - timedelta(1)).strftime("%Y%m%d")
-        base_date = '20240614'  # 발표 일자
+
+        base_date = (datetime.today() - timedelta(1)).strftime('%Y%m%d') # 발표 일자
         base_time = '2300'  # 발표 시간
         nx = '62'  # 예보 지점 x좌표
         ny = '123'  # 예보 지점 y좌표
@@ -98,7 +99,7 @@ class Predict_Model:
 
         print(data1.head())
 
-        with open('xgboost_saved_model_240516', 'rb') as f:
+        with open('main/dashboard/xgboost_saved_model_240516', 'rb') as f:
             model = pickle.load(f)
         predictions = model.predict(data1.drop(columns=['ds']))
 

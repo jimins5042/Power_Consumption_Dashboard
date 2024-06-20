@@ -9,9 +9,14 @@ import xmltodict
 import xml.etree.ElementTree as ET
 import json
 
+today = datetime.today()
+yesterday = str((datetime.today() - timedelta(1)).strftime('%Y%m%d'))
+print(yesterday)
+
 serviceKey = config.serviceKey
 # --> 날씨를 알고 싶은 시간 입력
-base_date = '20240616'  # 발표 일자
+#base_date = '20240618'  # 발표 일자
+base_date = (datetime.today() - timedelta(1)).strftime('%Y%m%d')
 base_time = '2300'  # 발표 시간
 nx = '62'  # 예보 지점 x좌표
 ny = '123'  # 예보 지점 y좌표
@@ -36,7 +41,6 @@ pivot_df = weather_df.pivot_table(
 
 # 결과 출력
 print(pivot_df.head())
-
 
 data = []
 for row in pivot_df.itertuples():
@@ -71,7 +75,6 @@ df = pd.DataFrame(data)
 print("?")
 print(df.head())
 
-
 # Convert to DataFrame
 df = pd.DataFrame(data)
 print(df.head())
@@ -94,4 +97,3 @@ with open('xgboost_saved_model_240516', 'rb') as f:
 predictions = model.predict(data1.drop(columns=['ds']))
 
 print(predictions)
-

@@ -4,11 +4,11 @@ let dataTable;
 $(document).ready(function () {
     $.ajax({
         type: 'POST',
-        url: '/show',  // Flask 라우트의 URL
+        url: '/power',  // Flask 라우트의 URL
         success: function (response) {
             // 서버에서 받은 JSON 데이터 처리
             console.log("데이터 받아오기");
-            createChart(response, "myAreaChart");
+            createChart(response, "stockChart");
 
         },
         error: function (error) {
@@ -25,13 +25,27 @@ async function createChart(response, route) {
     let labels, dataset1, dataset2, minY;
     let lablename1, lablename2;
 
-
     if (route === 'stockChart') {
+
+        let today = new Date();
+        let hours = today.getHours() - 1;
+
+        const dateFormatOptions1 = {
+            //year: 'numeric',
+            //month: '2-digit',
+            //day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+        };
+
         //labels = data.data.map(row => (row[0]));
-        labels = data.data.map(row => new Date(row[0]));
+
+        labels = data.data.map(row => new Date(row[0]).toLocaleString('sv-SE', dateFormatOptions1));
 
         dataset1 = data.data.map(row => row[1]);
-        latestPrice = dataset1[dataset1.length - 1];
+        //latestPrice = dataset1[dataset1.length - 1];
+        latestPrice = dataset1[hours];
         highestPrice = Math.max(...dataset1);
         lowestPrice = Math.min(...dataset1);
 
@@ -82,6 +96,7 @@ async function createChart(response, route) {
     let options;
 
     if (route === 'stockChart') {
+
         options = {
             //responsive: false,
             interaction: {
@@ -90,14 +105,7 @@ async function createChart(response, route) {
             },
             scales: {
                 x: {
-                    type: 'time',
-                    time: {
-                        unit: 'hour',
-                        tooltipFormat: 'yyyy-MM-dd HH:mm',
-                        displayFormats: {
-                            hour: 'HH:mm'
-                        }
-                    },
+
                     title: {
                         display: true,
                         text: '날짜'
@@ -105,7 +113,6 @@ async function createChart(response, route) {
                         borderDash: [5, 5] // 점선으로 만들기 위한 설정
                     }
                 },
-
                 y: {
                     beginAtZero: false,
                     title: {
@@ -113,6 +120,28 @@ async function createChart(response, route) {
                         text: '전력'
                     }, grid: {
                         borderDash: [5, 5] // 점선으로 만들기 위한 설정
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    align: 'end'
+                },
+                tooltip: {
+                    enabled: true, // 툴팁을 활성화
+                    titleFont: {size: 25},
+                    bodyFont: {size: 20, color: '#ffffff'},
+                    callbacks: {
+
+                        label: function (context) {
+
+                            const value = context.raw || '';
+
+                            // 예시: 날짜 형식을 'YYYY-MM-DD'에서 'DD/MM/YYYY'로 변경
+
+                            return ` SMP 가격 : ${value}원/kWh`;
+                        },
+
                     }
                 }
             },
@@ -164,7 +193,7 @@ async function createChart(response, route) {
                         label: function (context) {
                             const label = context.dataset.label || '';
                             const value = Math.round(context.raw);
-                            return `${label}: ${value}`;
+                            return ` ${label}: ${value}`;
                         }
                     }
                 }

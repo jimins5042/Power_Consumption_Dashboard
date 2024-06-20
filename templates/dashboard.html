@@ -18,20 +18,19 @@
             rel="stylesheet">
 
     <!-- Custom styles for this template-->
+
     <link href="../static/css/sb-admin-2.min.css" rel="stylesheet">
 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet"/>
+
     <style>
+
         .chart-area {
             width: 100%;
 
             height: auto;
 
-            /*padding-bottom: 60%; /* 5:3 ratio */
-        }
-
-        .chart-area canvas {
-            width: 100% !important;
-            height: auto !important;
+            /*padding-bottom: 60%; /* 5:3 ratio*/
         }
 
         .text-center {
@@ -41,7 +40,29 @@
         .form-control::placeholder {
             color: #858796;
         }
+
+        .table.table-bordered {
+            border: none !important;
+            border-color: #e3e6f0;
+        }
+
+        .table.table-bordered tbody tr td {
+            border-right: none !important;
+            border-left: none !important;
+            border-top: none !important;
+            border-bottom-color: #e3e6f0;
+
+        }
+
+        .table.table-bordered thead tr th {
+            border-right: none !important;
+            border-left: none !important;
+            border-top: none !important;
+            border-bottom-color: #e3e6f0;
+        }
     </style>
+
+
 </head>
 
 <body id="page-top">
@@ -488,69 +509,26 @@
                 </div>
 
                 <!-- 메인 컨텐츠 부분 -->
-
-                <div class="row">
-
-                    <!-- Area Chart -->
-                    <div class="col-xl-8 col-lg-7">
-
-                        <div class="card shadow mb-4">
-                            <!-- Card Header - Dropdown -->
-                            <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                <h6 class="m-0 font-weight-bold text-primary">실시간 전력수급 및 전력 예보 그래프</h6>
-                                <div class="dropdown no-arrow">
-                                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                         aria-labelledby="dropdownMenuLink">
-                                        <div class="dropdown-header">Dropdown Header:</div>
-                                        <a class="dropdown-item" href="#">Action</a>
-                                        <a class="dropdown-item" href="#">Another action</a>
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="#">Something else here</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Card Body -->
-                            <div class="card-body">
-                                <div class="chart-area">
-                                    <canvas id="myAreaChart"></canvas>
-                                </div>
-                                <hr>
-                                * 실시간 전력수급현황은 5분주기 순시자료 입니다.
-                            </div>
-                        </div>
+                <!-- Area Chart -->
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3" style="margin-top: 20px;">
+                        <h5 class="m-0 font-weight-bold text-secondary">실시간 전력수급 및 전력 예보 그래프</h5>
                     </div>
 
-                    <!--/div-->
-
-                    <!-- 임시로 삽입 Pie Chart -->
-                    <div class="col-xl-4 col-lg-5">
-                        <div class="card shadow mb-4">
-
-
-                            <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary">Development Approach</h6>
-                            </div>
-                            <div class="card-body">
-                                <p>SB Admin 2 makes extensive use of Bootstrap 4 utility classes in order to reduce
-                                    CSS bloat and poor page performance. Custom CSS classes are used to create
-                                    custom components and custom utility classes.</p>
-                                <p class="mb-0">Before working with this theme, you should become familiar with the
-                                    Bootstrap framework, especially the utility classes.</p>
-                            </div>
-
+                    <!-- Card Body -->
+                    <div class="card-body">
+                        <div class="chart-area">
+                            <canvas id="myAreaChart" style="height:400px; width:100%;"></canvas>
                         </div>
+                        <hr>
+                        * 실시간 전력수급현황은 5분주기 순시자료 입니다.
                     </div>
                 </div>
 
                 <!-- datatables -->
                 <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">전일 전력수급실적</h6>
+                    <div class="card-header py-3" style="margin-top: 20px;">
+                        <h5 class="m-0 font-weight-bold text-secondary">전일 전력수급실적</h5>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -568,7 +546,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
             <!-- /.container-fluid -->
 
