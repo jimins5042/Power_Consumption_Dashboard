@@ -1,4 +1,5 @@
 from langchain.embeddings import CacheBackedEmbeddings
+from langchain_community.document_loaders import PyPDFLoader
 from langchain.storage import LocalFileStore
 from langchain.text_splitter import CharacterTextSplitter
 from langchain_community.document_loaders import WebBaseLoader
@@ -11,13 +12,17 @@ import os
 import config
 
 
+# 자료 임베딩
 class chatbot_service:
     def caching_flies(self):
         os.environ['OPENAI_API_KEY'] = config.OPENAI_API_KEY
 
+        #pdf 로더 설정
+        # data_loader = PyPDFLoader("C:/Users/Desktop/data/비용평가세부운영규정.pdf")
+
         # 웹페이지 로더 설정
         data_loader = WebBaseLoader(
-            "https://namu.wiki/w/%ED%95%9C%EA%B5%AD%EC%A0%84%EB%A0%A5%EA%B1%B0%EB%9E%98%EC%86%8C")
+            "https://marketrule.kpx.or.kr/lmxsrv/law/lawListManager_areaC.do?SEQ=0&PAGE_MODE=0&LAWGROUP=1&TREE_MODE=0")
         cache_dir = LocalFileStore("./.cache/")
 
         # 텍스트 분할 설정
@@ -107,7 +112,8 @@ class chatbot_service:
         cached_embeddings = CacheBackedEmbeddings.from_bytes_store(embeddings, "./.cache/")
         vectorstore = Chroma(embedding_function=cached_embeddings, persist_directory="./.cache/")
 
-        answer_sources = vectorstore.similarity_search_with_relevance_scores(user_input, k=3)  # 검색된 상위 3개의 문장
+        # 사용자 질문과 유사도가 높은 검색된 상위 3개의 문장, 유사도 받아오기
+        answer_sources = vectorstore.similarity_search_with_relevance_scores(user_input, k=10)
 
         source = pd.DataFrame(
             [(result[0].page_content, result[1]) for result in answer_sources],

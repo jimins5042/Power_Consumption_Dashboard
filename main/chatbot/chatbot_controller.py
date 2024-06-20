@@ -27,13 +27,14 @@ class chatbot_controller:
 
     @cb.route('/search', methods=["POST"])
     def similarity_search():
+
         user_message = request.json
 
+        # 사용자 질문과 유사도가 높은 검색된 상위 3개의 문장, 유사도 받아오기
         source = chatbot_controller.generate_bot_response(user_message, 'search')
         print(source)
 
         return source.to_json(orient='split')
-
 
     def generate_bot_response(user_message, type):
         # 간단한 봇 응답 로직 (필요에 따라 수정 가능)
@@ -51,9 +52,11 @@ class chatbot_controller:
 
         else:
             if (type == "chat"):
-                #answer = chat_res.caching_embeds(user_message)
-                answer = "성공"
+                answer = chat_res.caching_embeds(user_message)
+                #answer = "성공"
             if (type == "search"):
+
+                #string이 아닌 dataframe을 반환
                 source = chat_res.caching_similar_search(user_message)
                 return source
 

@@ -1,3 +1,5 @@
+let dataTable;
+
 document.addEventListener('DOMContentLoaded', function () {
     const sendButton = document.getElementById("send-button");
     const userInput = document.getElementById("user-input");
@@ -11,11 +13,13 @@ document.addEventListener('DOMContentLoaded', function () {
         messagesContainer.appendChild(botMessageElement);
     }
 
+
     // 페이지가 로드되었을 때 기본 메시지를 추가
     const defaultMessages = ["안녕하세요!<br> 전력거래소 관리 AI 입니다.", "무엇이 궁금하신가요?"];
     defaultMessages.forEach(message => {
         displayBotMessage(message);
     });
+
     scrollToBottom(messagesContainer);
 
     sendButton.addEventListener("click", async () => {
@@ -23,6 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
         displayUserMessage(userMessage);
         scrollToBottom(messagesContainer);
 
+        // 답변 생성후 받아오는 함수
         fetch("/chat", {
             method: "POST",
             headers: {
@@ -39,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 scrollToBottom(messagesContainer);
             });
 
-
+        //답변 생성에 참고한, 사용자 질문과 유사한 문장 3개를 출력하는 함수
         fetch("/search", {
             method: "POST",
             headers: {
@@ -49,15 +54,15 @@ document.addEventListener('DOMContentLoaded', function () {
         })
             .then(response => response.json())
             .then(data => {
-                // Destroy existing DataTable instance (if any)
-                console.log("Received data:", data);
+
                 const tableBody = document.querySelector('#dataTable tbody');
                 tableBody.innerHTML = '';
-                const maxLength = 20; // 최대 길이 설정 (예시로 20자)
+                const maxLength = 30; // 최대 길이 설정
 
                 data.data.forEach(row => {
                     const tr = document.createElement('tr');
                     const data2 = document.createElement('td');
+
                     //dateTd.textContent = row[0];
                     // row[0] 문자열의 길이가 maxLength보다 길면 자름
 
@@ -80,8 +85,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     tableBody.appendChild(tr);
                 });
 
+                initializeRowClickListeners();
+
             });
     });
+
 
     function displayUserMessage(message) {
         const userMessageElement = document.createElement("div");
@@ -103,6 +111,20 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
+    function initializeRowClickListeners() {
+        const tableBody = document.querySelector('#dataTable tbody');
+        const tableRows = tableBody.querySelectorAll('tr');
+        tableRows.forEach(row => {
+            row.addEventListener('click', function () {
+                const rowId = this.dataset.rowId;
+                //const url = `/details?id=${rowId}`; // Update with the actual URL pattern
+                const url = "https://www.naver.com/";
+                //window.location.href = url;
+                window.open(url, '_blank');
+            });
+        });
+    }
+
+
     userInput.addEventListener("keydown", handleInputKeyPress);
-})
-;
+});
