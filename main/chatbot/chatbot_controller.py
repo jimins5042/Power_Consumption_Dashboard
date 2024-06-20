@@ -1,7 +1,7 @@
 import json
 
-from flask import render_template, request, Response, Blueprint
-
+from flask import render_template, request, Response, Blueprint, jsonify
+import pandas as pd
 from main.chatbot.chatbot_service import chatbot_service
 
 cb = Blueprint("chatbot_controller", __name__)
@@ -19,16 +19,26 @@ class chatbot_controller:
     def chat_rag():
         user_message = request.json
 
-        response_message = chatbot_controller.generate_bot_response(user_message)
+        response_message = chatbot_controller.generate_bot_response(user_message, 'chat')
 
         # 한국어 인코딩
         res = json.dumps(response_message, ensure_ascii=False).encode('utf8')
         return Response(res, content_type='application/json; charset=utf-8')
 
-    def generate_bot_response(user_message):
+    @cb.route('/search', methods=["POST"])
+    def similarity_search():
+        user_message = request.json
+
+        source = chatbot_controller.generate_bot_response(user_message, 'search')
+        print(source)
+
+        return source.to_json(orient='split')
+
+
+    def generate_bot_response(user_message, type):
         # 간단한 봇 응답 로직 (필요에 따라 수정 가능)
 
-        answer = ""
+        answer = ''
         if user_message == "안녕":
             answer = "안녕하세요! 무엇을 도와드릴까요?"
 
@@ -40,6 +50,11 @@ class chatbot_controller:
             answer = "자료 학습 완료!"
 
         else:
-            answer = chat_res.caching_embeds(user_message)
+            if (type == "chat"):
+                #answer = chat_res.caching_embeds(user_message)
+                answer = "성공"
+            if (type == "search"):
+                source = chat_res.caching_similar_search(user_message)
+                return source
 
         return answer

@@ -23,7 +23,27 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
     <link rel="stylesheet" href="../static/css/chatbot.css">
+    <style>
+        .table.table-bordered {
+            border: none !important;
+            border-color: #e3e6f0;
+        }
 
+        .table.table-bordered tbody tr td {
+            border-right: none !important;
+            border-left: none !important;
+            border-top: none !important;
+            border-bottom-color: #e3e6f0;
+
+        }
+
+        .table.table-bordered thead tr th {
+            border-right: none !important;
+            border-left: none !important;
+            border-top: none !important;
+            border-bottom-color: #e3e6f0;
+        }
+    </style>
 
 </head>
 
@@ -412,21 +432,20 @@
 
                     </div>
 
-
                 </div>
 
                 <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
+                    <div class="card-header py-3" style="margin-top: 20px;">
+                        <h5 class="m-0 font-weight-bold text-secondary">전일 전력수급실적</h5>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                 <thead>
                                 <tr>
-                                    <th>날짜</th>
-                                    <th>1일전 전력</th>
-                                    <th>예측 전력</th>
+                                    <th>#</th>
+                                    <th>Page Content</th>
+                                    <th>Similarity Score</th>
                                 </tr>
                                 </thead>
                                 <tbody>

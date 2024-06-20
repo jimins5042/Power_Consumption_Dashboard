@@ -6,6 +6,7 @@ from langchain_community.vectorstores import Chroma
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough, RunnableLambda
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
+import pandas as pd
 import os
 import config
 
@@ -65,6 +66,7 @@ class chatbot_service:
 
         def map_docs(inputs):
             documents, question = inputs["documents"], inputs["question"]
+
             return "\n\n".join(
                 map_chain.invoke({"context": doc.page_content, "question": question}).content
                 for doc in documents
@@ -98,3 +100,20 @@ class chatbot_service:
 
         # content 값 추출
         return answer[start_index:end_index]
+
+    def caching_similar_search(self, user_input):
+        os.environ['OPENAI_API_KEY'] = config.OPENAI_API_KEY
+        embeddings = OpenAIEmbeddings()
+        cached_embeddings = CacheBackedEmbeddings.from_bytes_store(embeddings, "./.cache/")
+        vectorstore = Chroma(embedding_function=cached_embeddings, persist_directory="./.cache/")
+
+        answer_sources = vectorstore.similarity_search_with_relevance_scores(user_input, k=3)  # 검색된 상위 3개의 문장
+
+        source = pd.DataFrame(
+            [(result[0].page_content, result[1]) for result in answer_sources],
+            columns=["page_content", "similarity_score"]
+        )
+        source['num'] = range(1, len(source) + 1)
+
+        print("유사도 검색 완료")
+        return source
