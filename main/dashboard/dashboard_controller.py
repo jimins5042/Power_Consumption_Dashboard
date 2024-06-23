@@ -14,7 +14,7 @@ class dashboard_controller:
     def show_graph():
         # return render_template('Graph.html')
 
-        return render_template('dashboard.html')
+        return render_template('common_frame.html', filename = 'dashboard.html')
 
     @ds.route('/show', methods=['POST'])
     def predict_cal():
@@ -53,7 +53,7 @@ class dashboard_controller:
     def SMP():
         print('SMP')
 
-        return render_template('power_transaction.html')
+        return render_template('common_frame.html', filename ='power_transaction.html')
 
 
     @ds.route('/power', methods=['POST'])

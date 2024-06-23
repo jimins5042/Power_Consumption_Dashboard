@@ -13,7 +13,7 @@ class chatbot_controller:
     @cb.route('/chat', methods=["GET"])
     def chat():
         # return render_template('chat.html')
-        return render_template('chatbot.html')
+        return render_template('common_frame.html', filename = 'chatbot.html')
 
     @cb.route('/chat', methods=["POST"])
     def chat_rag():

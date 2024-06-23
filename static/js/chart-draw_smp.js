@@ -1,6 +1,7 @@
 let myChart;
 let dataTable;
 
+
 $(document).ready(function () {
     $.ajax({
         type: 'POST',
