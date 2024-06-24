@@ -25,11 +25,11 @@ class Predict_By_Prophet:
         print(data1.head())
 
         prophet_m = Prophet().add_seasonality(name='weekly', period=7, fourier_order=10, prior_scale=1).fit(data1)
-        with open('main/dashboard/saved_model', 'wb') as f:
+        with open('../main/dashboard/saved_model', 'wb') as f:
             pickle.dump(prophet_m, f)
 
     def predict(self):
-        with open('main/dashboard/saved_model', 'rb') as f:
+        with open('../main/dashboard/saved_model', 'rb') as f:
             prophet_m = pickle.load(f)
 
         future = prophet_m.make_future_dataframe(periods=30)

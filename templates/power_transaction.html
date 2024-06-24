@@ -1,7 +1,8 @@
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+
 <style>
-    .form-control::placeholder {
-        color: #858796;
-    }
 
     .container {
         display: flex;
@@ -30,11 +31,25 @@
         flex-direction: column;
         gap: 10px;
     }
+
+    .modal-body {
+        color: black;
+    }
+
+    .form-control {
+        color: black;
+    }
+
+
 </style>
-<link rel="stylesheet" href="../static/css/chatbot.css">
 
 
 <div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">전력거래 플랫폼 운영</h1>
+    <p class="mb-4">분산형전원을 하나로 모아 전북 지역 내 전력 서비스를 공급할 수 있도록 전력 거래 플랫폼을 운영합니다.
+        이 플랫폼을 통해 신재생에너지 발전 사업의 활성화를 유도하고 전력 자립률을 높여 전력 거래의 투명성과 효율성을 높입니다.</p>
 
     <div class="card shadow mb-4">
         <div class="card-header py-3" style="margin-top: 5px;">
@@ -57,8 +72,80 @@
                         </div>
                         <div class="d-grid gap-2">
                             <div class="button-container">
-                                <button class="btn btn-success btn-lg" onclick="buyStock()">매수</button>
-                                <button class="btn btn-danger btn-lg" onclick="sellStock()">매도</button>
+                                <button class="btn btn-success btn-lg" data-bs-toggle="modal"
+                                        data-bs-target="#exampleModal" onclick="setModalTitle('매수')">매수
+                                </button>
+                                <button class="btn btn-danger btn-lg" data-bs-toggle="modal"
+                                        data-bs-target="#exampleModal" onclick="setModalTitle('매도')">매도
+                                </button>
+
+                                <!-- 모달 -->
+                                <div class="modal fade" id="exampleModal" tabindex="-1"
+                                     aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="ModalTitle">Modal title</h1>
+
+                                            </div>
+                                            <div class="modal-body">
+                                                <form id="buyForm">
+                                                    <div class="mb-3">
+                                                        <label for="unitPrice" class="form-label">단가</label>
+
+                                                        <div class="input-group">
+                                                            <button type="button" class="btn btn-outline-secondary"
+                                                                    onclick="decrementValue('unitPrice')">-
+                                                            </button>
+                                                            <input type="text" class="form-control text-center"
+                                                                   id="unitPrice" name="unitPrice"
+                                                                   oninput="updateTotalPrice()"
+                                                            >
+
+                                                            <button type="button" class="btn btn-outline-secondary"
+                                                                    onclick="incrementValue('unitPrice')">+
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="quantity" class="form-label">수량</label>
+                                                        <div class="input-group">
+                                                            <button type="button" class="btn btn-outline-secondary"
+                                                                    onclick="decrementValue('quantity')">-
+                                                            </button>
+                                                            <input type="text" class="form-control text-center "
+                                                                   id="quantity" name="quantity" value="100"
+                                                                   oninput="updateTotalPrice()"
+                                                            >
+
+                                                            <button type="button" class="btn btn-outline-secondary"
+                                                                    onclick="incrementValue('quantity')">+
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="currentPriceModal" class="form-label"
+                                                               id="currentPriceTitle">현재가</label>
+                                                        <input type="text" class="form-control text-center"
+                                                               id="currentPriceModal"
+                                                               name="currentPriceModal">
+
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                    닫기
+                                                </button>
+                                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                                                        onclick="transactionLog()">
+                                                    거래하기
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--모달 끝-->
                             </div>
                         </div>
                     </div>
@@ -71,13 +158,66 @@
 
 
         <script>
+            let alertlog = "매수 성공"
 
-            function buyStock() {
-                alert("Stock bought!");
+            function setModalTitle(title) {
+                document.getElementById('ModalTitle').innerText = "전력 " + title + " 주문";
+                document.getElementById('currentPriceTitle').innerText = title + "금액";
+
+                setCurrentPrice();
+                if (title == '매수') {
+                    alertlog = "매수 성공"
+                } else {
+                    alertlog = "매도 성공"
+                }
             }
 
-            function sellStock() {
-                alert("Stock sold!");
+            function setCurrentPrice() {
+                const currentPrice = document.getElementById('currentPrice').innerText;
+
+                document.getElementById('currentPriceModal').value = currentPrice + "원";
+                document.getElementById('unitPrice').value = currentPrice + "원/kWh";
+            }
+
+            function transactionLog() {
+                alert(alertlog);
+            }
+
+            function incrementValue(id) {
+                const input = document.getElementById(id);
+                let value = parseInt(input.value, 10);
+                value = isNaN(value) ? 0 : value;
+                if (id == 'unitPrice') {
+                    value = value + 10;
+                    input.value = value + "원/kWh";
+                } else {
+                    value = value + 100;
+                    input.value = value + "kWh";
+                }
+
+                updateTotalPrice();
+            }
+
+            function decrementValue(id) {
+                const input = document.getElementById(id);
+                let value = parseInt(input.value, 10);
+                value = isNaN(value) ? 0 : value;
+                if (id == 'unitPrice') {
+                    value = value > 0 ? value - 10 : 0; // 0 이하로 내려가지 않도록
+                    input.value = value + "원/kWh"
+                } else {
+                    value = value > 0 ? value - 100 : 0; // 0 이하로 내려가지 않도록
+                    input.value = value + "kWh";
+                }
+
+                updateTotalPrice();
+            }
+
+            function updateTotalPrice() {
+                const unitPrice = parseInt(document.getElementById('unitPrice').value, 10);
+                const quantity = parseInt(document.getElementById('quantity').value, 10);
+                const totalPrice = (isNaN(unitPrice) ? 0 : unitPrice) * (isNaN(quantity) ? 0 : quantity);
+                document.getElementById('currentPriceModal').value = totalPrice.toLocaleString('ko-KR') + "원";
             }
 
 

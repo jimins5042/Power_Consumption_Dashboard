@@ -23,6 +23,42 @@
         background-color: #abd3ff; /* Change to the color you want */
         cursor: pointer; /* Optional: changes the cursor to a pointer */
     }
+
+
+    .card-body p {
+        /* 일반적인 문장 스타일 */
+        color: black; /* 기본 글자색 */
+        transition: color 0.3s ease; /* 색 변화에 대한 transition */
+    }
+
+    .card-body p:nth-of-type(1):hover {
+        color: #1470d9;
+    }
+
+    .card-body p:nth-of-type(2):hover {
+        color: #1470d9;
+    }
+
+    .card-body p:nth-of-type(3):hover {
+        color: #1470d9;
+    }
+
+    .card-body p:nth-of-type(4):hover {
+        color: #1470d9;
+    }
+
+    .card-body p:nth-of-type(5):hover {
+        color: #1470d9;
+    }
+
+    .card-body p:nth-of-type(6):hover {
+        color: #1470d9;
+    }
+
+    .card-body p:nth-of-type(7):hover {
+        color: #1470d9;
+    }
+
 </style>
 <link rel="stylesheet" href="../static/css/chatbot.css">
 
@@ -30,11 +66,10 @@
 <div class="container-fluid">
 
     <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">챗봇</h1>
-    <p class="mb-4">Chart.js is a third party plugin that is used to generate the charts in this theme.
-        The charts below have been customized - for further customization options, please visit the <a
-                target="_blank" href="https://www.chartjs.org/docs/latest/">official Chart.js
-            documentation</a>.</p>
+    <h1 class="h3 mb-2 text-gray-800">분산 에너지사업 특화 생성형 AI</h1>
+    <p class="mb-4">분산 에너지사업에 특화된 LLM(대규모 언어모듈)을 구축하여,
+        전력 거래 데이터, 분산 에너지법 등 방대한 전력 서비스 관련 데이터를 바탕으로
+        강력한 인공지능 기반 답변 솔루션을 제공하여 원활한 전력 서비스 사업을 보조합니다.</p>
 
     <!-- Content Row -->
     <div class="row">
@@ -44,7 +79,7 @@
             <!-- Area Chart -->
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Area Chart</h6>
+                    <h5 class="m-0 font-weight-bold text-secondary">생성형 AI</h5>
                 </div>
                 <div class="card-body">
                     <div class="chat-container">
@@ -61,11 +96,31 @@
                         </div>
                     </div>
                     <hr>
-                    Styling for the area chart can be found in the
-                    <code>/js/demo/chart-area-demo.js</code> file.
+                    * 전력거래소 관리 AI는 실수를 할 수 있습니다. 아래에서 대답에 대한 근거자료를 확인하세요.
                 </div>
             </div>
 
+        </div>
+
+        <div class="col-xl-4 col-lg-5">
+            <div class="card shadow mb-4">
+
+
+                <div class="card-header py-3">
+                    <h5 class="m-0 font-weight-bold text-secondary">자주 묻는 질문</h5>
+                </div>
+                <div class="card-body">
+
+                    <p class="mb-0">Q. 분산 에너지 특별법이 무엇이고 우리 삷에 어떤 영향을 끼치나요?</p><br>
+                    <p class="mb-0">Q. 신재생에너지 RPS 제도, REC, SMP란 무엇인가요?</p><br>
+                    <p class="mb-0">Q. REC 계약시장과 현물시장이 무엇인가요? (feat. RE100 거래시장)</p><br>
+                    <p class="mb-0">Q. SMP 상한제란 무엇인가요?</p><br>
+                    <p class="mb-0">Q. 태양광 패널의 빛 반사가 눈부심을 유발하지는 않나요?</p><br>
+                    <p class="mb-0">Q. RE100 이행 방법 중 직접 PPA, 제3자 PPA란 무엇인가요?</p><br>
+                    <p class="mb-0">Q. 전력판매대금(SMP) 정산은 어떻게 하나요?</p>
+                </div>
+
+            </div>
         </div>
 
     </div>
@@ -92,6 +147,6 @@
             </button>
         </div>
     </div>
-<script src="../static/js/chat-bot-demo.js"></script>
+    <script src="../static/js/chat-bot-demo.js"></script>
 
 </div>
