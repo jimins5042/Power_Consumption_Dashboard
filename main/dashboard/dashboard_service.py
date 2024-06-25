@@ -2,6 +2,7 @@ import requests
 import xmltodict
 import pandas as pd
 import config
+from datetime import datetime, timedelta
 
 
 class dashboard_service:
@@ -16,16 +17,35 @@ class dashboard_service:
 
         print(supply_df.head())
         data = []
+        b_hour = 0
         for row in supply_df.itertuples():
             baseDate = pd.to_datetime(getattr(row, 'baseDatetime')[:12])
             currPwrTot = float(getattr(row, 'currPwrTot'))
             hour = int(pd.to_datetime(getattr(row, 'baseDatetime')[:12]).hour)
-
+            b_hour = hour
             data.append({
                 '기준일시': baseDate,
                 '현재수요': currPwrTot,
                 '시간': hour
             })
+
+        if b_hour < 23:
+            base_date = datetime.today().strftime('%Y%m%d')  # 발표 일자
+
+            base_time = 24 - b_hour
+
+            for i in range(b_hour):
+
+                if (i + base_time) > 9:
+                    dt = str(base_date) + str(i + base_time) + "00"
+
+                else:
+                    dt = str(base_date) + "0" + str(i + base_time) + "00"
+
+                data.append({
+                    '기준일시': pd.to_datetime(dt)
+                })
+
         df = pd.DataFrame(data)
 
         df['기준일시'] = pd.to_datetime(df['기준일시'])
@@ -40,13 +60,16 @@ class dashboard_service:
         res = xmltodict.parse(response.text)
 
         smp_df = pd.DataFrame(res['response']['body']['items']['item'])
+        print(smp_df.head())
+
         smp_df = smp_df.drop(columns=['areaCd'])
 
         smp_df['smp'] = smp_df['smp'].astype(float)
 
+
         smp_df['timetable'] = pd.to_datetime(
             smp_df['tradeDay'].astype(str) + smp_df['tradeHour'].astype(str).str.zfill(2),
-            format='%Y%m%d%H')#.dt.strftime('%Y-%m-%d %H')
+            format='%Y%m%d%H')  # .dt.strftime('%Y-%m-%d %H')
 
         print('get_smpPrice')
 

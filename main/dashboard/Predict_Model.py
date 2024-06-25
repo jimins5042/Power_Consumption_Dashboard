@@ -28,7 +28,7 @@ class Predict_Model:
 
         # base_date = (datetime.today() - timedelta(1)).strftime("%Y%m%d")
 
-        base_date = (datetime.today() - timedelta(1)).strftime('%Y%m%d') # 발표 일자
+        base_date = (datetime.today() - timedelta(1)).strftime('%Y%m%d')  # 발표 일자
         base_time = '2300'  # 발표 시간
         nx = '62'  # 예보 지점 x좌표
         ny = '123'  # 예보 지점 y좌표
@@ -82,9 +82,7 @@ class Predict_Model:
 
             })
 
-
         df = pd.DataFrame(data)
-
 
         '''supply_df = pd.read_csv('C:/Users/김지민/Desktop/data/HOME_전력수급_실시간전력수급.csv')
         supply_df['일시'] = pd.to_datetime(supply_df['일시'])
@@ -95,7 +93,6 @@ class Predict_Model:
         df['1일전'] = data_r['현재부하(MW)']
 
         data1 = df[['ds', '기온', '습도', '전운량', '풍속', '요일', '시간', '휴일', '1일전']]
-
 
         print(data1.head())
 

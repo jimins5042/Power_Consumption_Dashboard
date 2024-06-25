@@ -49,7 +49,7 @@ async function createChart(response, route) {
         //const allData = dataset1.concat(dataset2);
         minY = Math.min(dataset2);
 
-        lablename1 = "현재 전력";
+        lablename1 = "실제 전력";
         lablename2 = "예측 전력";
     }
 
@@ -210,13 +210,13 @@ async function createChart(response, route) {
             dateTd.textContent = new Date(row[0]).toLocaleString('sv-SE', dateFormatOptions); // using 'sv-SE' to achieve the desired format
             tr.appendChild(dateTd);
 
-            const dataset1Td = document.createElement('td');
-            dataset1Td.textContent = parseFloat(row[1]).toFixed(2);
-            tr.appendChild(dataset1Td);
-
             const dataset2Td = document.createElement('td');
             dataset2Td.textContent = parseFloat(row[2]).toFixed(2);
             tr.appendChild(dataset2Td);
+
+            const dataset1Td = document.createElement('td');
+            dataset1Td.textContent = parseFloat(row[1]).toFixed(2);
+            tr.appendChild(dataset1Td);
 
             tableBody.appendChild(tr);
         });

@@ -27,6 +27,8 @@ document.addEventListener('DOMContentLoaded', function () {
         displayUserMessage(userMessage);
         scrollToBottom(messagesContainer);
 
+        displayLoadingMessage(); // 로딩 메시지 표시
+
         // 답변 생성후 받아오는 함수
         fetch("/chat", {
             method: "POST",
@@ -37,6 +39,7 @@ document.addEventListener('DOMContentLoaded', function () {
         })
             .then(response => response.text())
             .then(data => {
+                removeLoadingMessage(); // 로딩 메시지 숨기기
                 const botMessageElement = document.createElement("div");
                 botMessageElement.classList.add("chat-message", "bot-message");
                 botMessageElement.innerHTML = data; // innerHTML을 사용하여 HTML 태그 인식
@@ -118,11 +121,28 @@ document.addEventListener('DOMContentLoaded', function () {
             row.addEventListener('click', function () {
                 const rowId = this.dataset.rowId;
                 //const url = `/details?id=${rowId}`; // Update with the actual URL pattern
-                const url = "https://www.naver.com/";
+                const url = "https://marketrule.kpx.or.kr/lmxsrv/main/main.do";
                 //window.location.href = url;
                 window.open(url, '_blank');
             });
         });
+    }
+
+    function displayLoadingMessage() {
+        const loadingMessageElement = document.createElement("div");
+        loadingMessageElement.classList.add("chat-message", "bot-message");
+        loadingMessageElement.setAttribute("id", "loading-message");
+        loadingMessageElement.innerHTML = "로딩 중입니다...<br>잠시만 기다려주세요..."; // 로딩 중 메시지
+        messagesContainer.appendChild(loadingMessageElement);
+        scrollToBottom(messagesContainer);
+    }
+
+    // 로딩 메시지를 화면에서 제거하는 함수
+    function removeLoadingMessage() {
+        const loadingMessageElement = document.getElementById("loading-message");
+        if (loadingMessageElement) {
+            loadingMessageElement.remove();
+        }
     }
 
 

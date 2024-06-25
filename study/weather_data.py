@@ -10,6 +10,7 @@ import xml.etree.ElementTree as ET
 import json
 
 today = datetime.today()
+
 yesterday = str((datetime.today() - timedelta(1)).strftime('%Y%m%d'))
 print(yesterday)
 

@@ -7,6 +7,7 @@ from langchain_community.vectorstores import Chroma
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough, RunnableLambda
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
+import concurrent.futures
 import pandas as pd
 import os
 import config
@@ -69,13 +70,17 @@ class chatbot_service:
 
         map_chain = map_prompt | model
 
+        # 문장추출 병렬화
         def map_docs(inputs):
             documents, question = inputs["documents"], inputs["question"]
 
-            return "\n\n".join(
-                map_chain.invoke({"context": doc.page_content, "question": question}).content
-                for doc in documents
-            )
+            def process_doc(doc):
+                return map_chain.invoke({"context": doc.page_content, "question": question}).content
+
+            with concurrent.futures.ThreadPoolExecutor() as executor:
+                results = list(executor.map(process_doc, documents))
+
+            return "\n\n".join(results)
 
         map_results = {
                           "documents": retriever,
@@ -112,7 +117,7 @@ class chatbot_service:
         cached_embeddings = CacheBackedEmbeddings.from_bytes_store(embeddings, "./.cache/")
         vectorstore = Chroma(embedding_function=cached_embeddings, persist_directory="./.cache/")
 
-        # 사용자 질문과 유사도가 높은 검색된 상위 3개의 문장, 유사도 받아오기
+        # 사용자 질문과 유사도가 높은 검색된 상위 10개의 문장, 유사도 받아오기
         answer_sources = vectorstore.similarity_search_with_relevance_scores(user_input, k=10)
 
         source = pd.DataFrame(

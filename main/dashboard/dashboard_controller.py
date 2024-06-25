@@ -14,7 +14,7 @@ class dashboard_controller:
     def show_graph():
         # return render_template('Graph.html')
 
-        return render_template('common_frame.html', filename = 'dashboard.html')
+        return render_template('common_frame.html', filename='dashboard.html')
 
     @ds.route('/show', methods=['POST'])
     def predict_cal():
@@ -23,26 +23,26 @@ class dashboard_controller:
         supply_df.set_index('일시', inplace=True)
         df = supply_df.resample('H').mean().reset_index()
 
-        '''data_r = service.supply_date()
+        data_r = service.supply_date()
 
-        df['1일전'] = data_r['현재수요']
+        # df['1일전'] = data_r['현재수요']
 
         # data_r['1일전'] = df['현재부하(MW)']
-        print(data_r.head())'''
-        #predictions = p.predict_XGBoost(df)  # 예상 값
+        print(data_r.tail())
+        predictions = p.predict_XGBoost(df)  # 예상 값
 
-        resampled_data = {
+        '''resampled_data = {
             'Month': df['일시'].astype(str),
             'Dataset1': df['현재부하(MW)'],
             'Dataset2': df['현재부하(MW)']
-        }
-        '''
+        }'''
+
+        # 전력거래소 api 사용시 -> 하루 100회 제한
         resampled_data = {
-                    'Month': data_r['기준일시'].astype(str),
-                    'Dataset1': data_r['1일전'],
-                    'Dataset2': data_r['현재수요']
+            'Month': data_r['기준일시'].astype(str),
+            'Dataset1': data_r['현재수요'],
+            'Dataset2': predictions
         }
-        '''
 
         resampled_df = pd.DataFrame(resampled_data)
 
@@ -53,8 +53,7 @@ class dashboard_controller:
     def SMP():
         print('SMP')
 
-        return render_template('common_frame.html', filename ='power_transaction.html')
-
+        return render_template('common_frame.html', filename='power_transaction.html')
 
     @ds.route('/power', methods=['POST'])
     def show_SMP():
