@@ -2,8 +2,8 @@
 
 # 프로젝트 소개
 
-- 인공지능 기반의 주간 전력수급현황 예측 및 관리 시스템
-- 민간 발전 전력 거래 플랫폼
+- 기상 관측 데이터를 활용한 XGBoost 기반 주간 전력수요 예측 기법을 통해 전력 계통 운영의 안정성을 높이고, 지역 내 에너지 수요에 능동적으로 대응한다.
+- 분산 에너지사업 특화 생성형 AI 서비스와 전력 수급 관리 플랫폼을 구축하여 전북 지역 내 에너지 수요에 능동적으로 대응하고 전력 자립률을 높인다.
 
 </br>
 
@@ -23,26 +23,51 @@
 
 # 핵심 기능
 
-- XGBoost, Prophet 기반 전력 수요량 예측 알고리즘
-- 전력 예측 수요량 시각화 대시보드
-- 전력 거래 정보 특화 LLM 모델 (RAG 모델)
-- 전력 거래 플랫폼
+## 1. XGBoost 머신러닝 모델을 이용한 주간단기 전력수요 예측 모델 구축
+
+XGBoost 모델을 이용하여 전국 주간 단기 전력수요 예측 모델을 구축했다. 과거 전력수요랑 및 시간대별 기상관측 데이터, 특수일(공휴일, 대체휴일 등) 여부를 입력 특징으로 결정하였으며, 
+하이퍼파라미터를 최적화하여 과적합의 가능성을 줄이고 예측 모델의 성능을 개선하였다. 
+
+
+XGBoost 예측 모델의 성능은 평균 절대 비 오차(MAPE)는 3.15%, 평균 제곱근 편차(RMSE)는 2.732GW로 우수한 성능을 보여주었다. 
+기상청이 제공하는 단기 예보 구간인 최대 3일 이내 시간별 전력수요 예측과 중기 예보 구간인 최대 10일 이내 일일 전력수요 예측이 가능하다. 
+
+## 2. 분산 에너지사업 특화 생성형 AI를 통한 원활한 민간 전력 서비스 사업을 보조
+
+OpenAI에서 제공하는 GPT API를 이용하여 분산 에너지사업에 특화된 LLM(대규모 언어모델) 서비스를 구현했다. 전력 시장 운영규칙, 계통평가 세부 운영규정 등 방대한 데이터를 바탕으로 강력한 인공지능 기반 답변 솔루션을 제공하여 원활한 전력 서비스 사업을 보조한다. RAG(검색 증강 생성, Retrieval Augmented Generation) 아키텍처를 통해 사용자의 질문과 유사도가 높은 자료를 참고하여 답변을 생성하도록 하였다. 
+
+문서가 저장된 벡터 데이터베이스에서 질문과 유사한 내용을 검색한 후, 검색 결과에서 질문에 대한 답변이 될 만한 여러 문장들을 추출하여, 최종 답변을 생성하는 방식이다. 
+이를 통해 LLM의 단점인 정보 부족 문제와 거짓된 답변을 제공하는 ‘환각 현상’을 극복하였고 생성된 답변이 보다 정확하고 유용한 정보를 제공하는 것을 확인하였다.
 
 </br>
 
 # 화면 구성 (임시)
 
-## 주간전력 수요예측 대시보드
+## 동작 영상
 
-![포스트 2](https://github.com/jimins5042/Power_Consumption_Dashboard/assets/28335699/53a1cc7c-c13f-434f-a49e-f39feb0f0abd)
+[![Video Label](http://img.youtube.com/vi/9GiX0EYV9-M/0.jpg)](https://youtu.be/9GiX0EYV9-M)
 
-## 전력 거래 특화 LLM
 
-![포스트 3 (6)](https://github.com/jimins5042/Power_Consumption_Dashboard/assets/28335699/bd17cab4-82fe-4de6-8457-b81d9baff57f)
+## 전력수요 예측현황 대시보드
+
+![image](https://github.com/jimins5042/Power_Consumption_Dashboard/assets/28335699/a99566b8-64bd-4620-be80-3dfaf7266c7b)
+
+
+## 분산 에너지사업 특화 생성형 AI
+
+![캡처 2](https://github.com/jimins5042/Power_Consumption_Dashboard/assets/28335699/069ca730-49e6-46cc-b646-3d5eb8a6fd2e)
+
+RAG 아키텍쳐를 이용한 유사도 검색 기능
+![캡처5](https://github.com/jimins5042/Power_Consumption_Dashboard/assets/28335699/accd671d-9779-4fe7-a2b8-06268daec60d)
+
+
+## 전력 수급 관리 시스템
+
+![캡처 3](https://github.com/jimins5042/Power_Consumption_Dashboard/assets/28335699/0b75d8c2-2e3e-47d6-910c-5df4c8d4cd49)
+
+<br>
 
 # 구현 과정
 
 [![Velog's GitHub stats](https://velog-readme-stats.vercel.app/api?name=2jooin1207&slug=전력수급현황-예측-및-관리-시스템-만들기-개요)](https://velog.io/@2jooin1207/series/%EC%A0%84%EB%A0%A5%EC%88%98%EA%B8%89%ED%98%84%ED%99%A9-%EC%98%88%EC%B8%A1-%EB%B0%8F-%EA%B4%80%EB%A6%AC-%EC%8B%9C%EC%8A%A4%ED%85%9C-%EB%A7%8C%EB%93%A4%EA%B8%B0)
-
-
-
+<br>
