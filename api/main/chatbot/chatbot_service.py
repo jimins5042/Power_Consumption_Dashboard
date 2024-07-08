@@ -1,5 +1,4 @@
 from langchain.embeddings import CacheBackedEmbeddings
-from langchain_community.document_loaders import PyPDFLoader
 from langchain.storage import LocalFileStore
 from langchain.text_splitter import CharacterTextSplitter
 from langchain_community.document_loaders import WebBaseLoader
@@ -10,7 +9,7 @@ from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 import concurrent.futures
 import pandas as pd
 import os
-import config
+from api import config
 
 
 # 자료 임베딩

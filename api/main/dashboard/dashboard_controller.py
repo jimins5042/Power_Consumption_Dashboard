@@ -1,7 +1,7 @@
 import pandas as pd
 from flask import render_template, Blueprint
 
-from main.dashboard import dashboard_service, Predict_Model
+from api.main.dashboard import Predict_Model, dashboard_service
 
 ds = Blueprint("dashboard_controller", __name__)
 service = dashboard_service.dashboard_service()
