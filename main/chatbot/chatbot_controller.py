@@ -2,7 +2,7 @@ import json
 import time
 
 from flask import render_template, request, Response, Blueprint
-from api.main.chatbot.chatbot_service import chatbot_service
+from main.chatbot.chatbot_service import chatbot_service
 
 cb = Blueprint("chatbot_controller", __name__)
 chat_res = chatbot_service()
