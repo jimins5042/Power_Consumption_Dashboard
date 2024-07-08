@@ -9,7 +9,7 @@ from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 import concurrent.futures
 import pandas as pd
 import os
-from api import config
+import config
 
 
 # 자료 임베딩

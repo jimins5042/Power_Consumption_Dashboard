@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 import holidays
 import pandas as pd
 import requests
-from api import config
+import config
 
 
 class Predict_Model:

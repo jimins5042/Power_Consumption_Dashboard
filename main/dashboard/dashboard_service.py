@@ -1,7 +1,7 @@
 import requests
 import xmltodict
 import pandas as pd
-from api import config
+import config
 from datetime import datetime
 
 
