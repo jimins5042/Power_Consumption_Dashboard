@@ -2,7 +2,7 @@ import pandas as pd
 import requests
 import xmltodict
 
-import config
+from api import config
 
 url = f'https://openapi.kpx.or.kr/openapi/smp1hToday/getSmp1hToday?areaCd=1&serviceKey={config.serviceKey}'
 response = requests.get(url, verify=False)

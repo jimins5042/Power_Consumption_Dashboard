@@ -1,15 +1,10 @@
-from langchain.embeddings import CacheBackedEmbeddings
 from langchain.storage import LocalFileStore
 from langchain.text_splitter import CharacterTextSplitter
 from langchain_community.document_loaders import WebBaseLoader
 from langchain_community.vectorstores import Chroma
-from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.runnables import RunnablePassthrough, RunnableLambda
-from langchain_openai import OpenAIEmbeddings, ChatOpenAI
-from langchain_community.document_loaders import PyPDFLoader
-import pandas as pd
+from langchain_openai import OpenAIEmbeddings
 import os
-import config
+from api import config
 
 os.environ['OPENAI_API_KEY'] = config.OPENAI_API_KEY
 

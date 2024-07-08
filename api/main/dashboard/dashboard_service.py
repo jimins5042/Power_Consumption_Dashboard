@@ -1,8 +1,8 @@
 import requests
 import xmltodict
 import pandas as pd
-import config
-from datetime import datetime, timedelta
+from api import config
+from datetime import datetime
 
 
 class dashboard_service:
