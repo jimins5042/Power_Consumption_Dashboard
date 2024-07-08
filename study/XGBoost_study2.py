@@ -100,10 +100,14 @@ def cal(date):
     mse = mean_squared_error(test_set['y'][:240], predictions[:240])
     rmse = np.sqrt(mse)
     mape = mean_absolute_percentage_error(test_set['y'][:240], predictions[:240])
+    # 정확도 계산 (허용 오차를 10%로 설정)
+    tolerance = 0.10
+
 
     print(f'RMSE: {rmse}')
     print(f'MAPE: {mape}')
     print(f'MSE: {mse}')
+
 
     return rmse, mape
 
@@ -138,14 +142,16 @@ rmse = 0
 mape = 0
 for i in list:
     print(i)
-    x, y = cal(i)
+    x, y, z = cal(i)
     rmse = rmse + x
     mape = mape + y
 
     time.sleep(1)
+    
 rmse = rmse/len(list)
 mape = mape/len(list)
 
 print("\n 전체 평균")
 print(f'RMSE: {rmse}')
 print(f'MAPE: {mape}')
+
