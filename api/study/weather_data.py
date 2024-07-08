@@ -1,13 +1,9 @@
 from datetime import datetime, timedelta
-import json
 import requests
-import config
+from api import config
 import pickle
 import pandas as pd
 import holidays
-import xmltodict
-import xml.etree.ElementTree as ET
-import json
 
 today = datetime.today()
 

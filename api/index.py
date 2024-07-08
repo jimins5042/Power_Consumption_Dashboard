@@ -39,6 +39,7 @@ def shopping():
     return render_template('shop.html', products=products)
 
 
-
+'''
 if __name__ == '__main__':
     app.run()
+'''

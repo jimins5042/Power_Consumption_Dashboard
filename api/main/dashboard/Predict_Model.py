@@ -1,10 +1,9 @@
-import json
 import pickle
 from datetime import datetime, timedelta
 import holidays
 import pandas as pd
 import requests
-import config
+from api import config
 
 
 class Predict_Model:
