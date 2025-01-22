@@ -60,10 +60,10 @@ OpenAI에서 제공하는 GPT API를 이용하여 분산 에너지사업에 특�
 
 ## 분산 에너지사업 특화 생성형 AI
 
-![캡처 2](https://github.com/jimins5042/Power_Consumption_Dashboard/assets/28335699/069ca730-49e6-46cc-b646-3d5eb8a6fd2e)
+|![캡처 2](https://github.com/jimins5042/Power_Consumption_Dashboard/assets/28335699/069ca730-49e6-46cc-b646-3d5eb8a6fd2e)|![캡처5](https://github.com/jimins5042/Power_Consumption_Dashboard/assets/28335699/accd671d-9779-4fe7-a2b8-06268daec60d)|
+|:---:|:---:|
+|챗봇 화면|RAG 아키텍쳐를 이용한 유사도 검색 기능|
 
-RAG 아키텍쳐를 이용한 유사도 검색 기능
-![캡처5](https://github.com/jimins5042/Power_Consumption_Dashboard/assets/28335699/accd671d-9779-4fe7-a2b8-06268daec60d)
 
 
 ## 전력 수급 관리 시스템
